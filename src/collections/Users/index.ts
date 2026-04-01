@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { UserRoles, type UserRole } from '@/types/enums/user-role'
 import { enumToPayloadOptions } from '@/types/payload-options'
+import { validatePhone, validateSiret, validateVATNumber, validatePostalCodeFR } from '@/lib/validation'
 
 const USER_ROLE_LABELS: Record<UserRole, string> = {
   [UserRoles.Admin]: 'Admin',
@@ -55,6 +56,7 @@ export const Users: CollectionConfig = {
     {
       name: 'siret',
       type: 'text',
+      validate: validateSiret,
       admin: {
         description: 'Numéro SIRET (14 chiffres)',
       },
@@ -62,6 +64,7 @@ export const Users: CollectionConfig = {
     {
       name: 'vatNumber',
       type: 'text',
+      validate: validateVATNumber,
       admin: {
         description: 'N° TVA intracommunautaire',
       },
@@ -69,6 +72,7 @@ export const Users: CollectionConfig = {
     {
       name: 'phone',
       type: 'text',
+      validate: validatePhone,
     },
     {
       name: 'addresses',
@@ -77,7 +81,7 @@ export const Users: CollectionConfig = {
         { name: 'label', type: 'text' },
         { name: 'address', type: 'text', required: true },
         { name: 'city', type: 'text', required: true },
-        { name: 'postalCode', type: 'text', required: true },
+        { name: 'postalCode', type: 'text', required: true, validate: validatePostalCodeFR },
         { name: 'country', type: 'text', defaultValue: 'FR' },
         { name: 'isDefault', type: 'checkbox', defaultValue: false },
       ],

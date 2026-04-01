@@ -8,6 +8,8 @@ export default function QuotePage() {
   const t = useTranslations('quote')
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [items, setItems] = useState([{ productDescription: '', quantity: 1 }])
 
   const addItem = () => {
@@ -29,6 +31,8 @@ export default function QuotePage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setLoading(true)
+    setError('')
+    setFieldErrors({})
 
     const form = e.currentTarget
     const formData = new FormData(form)
@@ -53,9 +57,30 @@ export default function QuotePage() {
 
       if (response.ok) {
         setSubmitted(true)
+      } else {
+        const data = await response.json().catch(() => null)
+        if (data?.errors) {
+          const errors: Record<string, string> = {}
+          for (const err of data.errors as Array<{ name?: string; data?: Array<{ field?: string; message?: string }>; message?: string }>) {
+            if (err.data) {
+              for (const fieldErr of err.data) {
+                if (fieldErr.field && fieldErr.message) {
+                  errors[fieldErr.field] = fieldErr.message
+                }
+              }
+            }
+          }
+          if (Object.keys(errors).length > 0) {
+            setFieldErrors(errors)
+          } else {
+            setError(data.errors[0]?.message ?? 'Une erreur est survenue')
+          }
+        } else {
+          setError('Une erreur est survenue')
+        }
       }
     } catch {
-      // handle error
+      setError('Une erreur est survenue')
     } finally {
       setLoading(false)
     }
@@ -84,6 +109,12 @@ export default function QuotePage() {
       <p className="text-neutral-500 mb-8">{t('subtitle')}</p>
 
       <form onSubmit={handleSubmit} className="space-y-6">
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg p-3">
+            {error}
+          </div>
+        )}
+
         {/* Contact info */}
         <div className="grid md:grid-cols-2 gap-4">
           <div>
@@ -96,15 +127,18 @@ export default function QuotePage() {
           </div>
           <div>
             <label className="block text-sm font-medium text-neutral-700 mb-1">{t('email')} *</label>
-            <input name="email" type="email" required className="w-full border border-neutral-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none" />
+            <input name="email" type="email" required className={`w-full border rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none ${fieldErrors.email ? 'border-red-400' : 'border-neutral-300'}`} />
+            {fieldErrors.email && <p className="text-red-500 text-xs mt-1">{fieldErrors.email}</p>}
           </div>
           <div>
             <label className="block text-sm font-medium text-neutral-700 mb-1">{t('phone')} *</label>
-            <input name="phone" type="tel" required className="w-full border border-neutral-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none" />
+            <input name="phone" type="tel" required className={`w-full border rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none ${fieldErrors.phone ? 'border-red-400' : 'border-neutral-300'}`} />
+            {fieldErrors.phone && <p className="text-red-500 text-xs mt-1">{fieldErrors.phone}</p>}
           </div>
           <div>
             <label className="block text-sm font-medium text-neutral-700 mb-1">{t('siret')}</label>
-            <input name="siret" className="w-full border border-neutral-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none" />
+            <input name="siret" className={`w-full border rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none ${fieldErrors.siret ? 'border-red-400' : 'border-neutral-300'}`} />
+            {fieldErrors.siret && <p className="text-red-500 text-xs mt-1">{fieldErrors.siret}</p>}
           </div>
         </div>
 

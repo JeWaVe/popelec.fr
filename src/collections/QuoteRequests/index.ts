@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { QuoteRequestStatuses, type QuoteRequestStatus } from '@/types/enums/quote-request-status'
 import { UserRoles } from '@/types/enums/user-role'
 import { enumToPayloadOptions } from '@/types/payload-options'
+import { validateEmail, validatePhone, validateSiret, validateMinLength } from '@/lib/validation'
 
 const QUOTE_REQUEST_STATUS_LABELS: Record<QuoteRequestStatus, string> = {
   [QuoteRequestStatuses.New]: 'Nouveau',
@@ -33,6 +34,7 @@ export const QuoteRequests: CollectionConfig = {
       name: 'contactName',
       type: 'text',
       required: true,
+      validate: validateMinLength(2),
     },
     {
       name: 'company',
@@ -42,15 +44,18 @@ export const QuoteRequests: CollectionConfig = {
       name: 'email',
       type: 'email',
       required: true,
+      validate: validateEmail,
     },
     {
       name: 'phone',
       type: 'text',
       required: true,
+      validate: validatePhone,
     },
     {
       name: 'siret',
       type: 'text',
+      validate: validateSiret,
     },
     {
       name: 'items',

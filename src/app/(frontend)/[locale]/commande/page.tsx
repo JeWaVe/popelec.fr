@@ -17,6 +17,7 @@ export default function CheckoutPage() {
   const locale = useLocale() as Locale
   const [sameAsShipping, setSameAsShipping] = useState(true)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const tva = priceCents(Math.round(subtotalHT * 0.2))
   const totalTTC = priceCents(subtotalHT + tva)
@@ -35,6 +36,7 @@ export default function CheckoutPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setLoading(true)
+    setError('')
 
     try {
       const response = await fetch('/api/create-checkout-session', {
@@ -52,9 +54,11 @@ export default function CheckoutPage() {
       const data = await response.json()
       if (data.url) {
         window.location.href = data.url
+      } else {
+        setError(data.error || tCommon('error'))
       }
     } catch {
-      // handle error
+      setError(tCommon('error'))
     } finally {
       setLoading(false)
     }
@@ -65,6 +69,11 @@ export default function CheckoutPage() {
       <h1 className="text-3xl font-bold mb-8">{t('title')}</h1>
 
       <form onSubmit={handleSubmit}>
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg p-3 mb-6">
+            {error}
+          </div>
+        )}
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Forms */}
           <div className="lg:col-span-2 space-y-8">
