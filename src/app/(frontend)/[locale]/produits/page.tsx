@@ -9,7 +9,7 @@ import type { Where } from 'payload'
 
 type Props = {
   params: Promise<{ locale: string }>
-  searchParams: Promise<{ category?: string; sort?: string; page?: string }>
+  searchParams: Promise<{ category?: string; sort?: string; page?: string; q?: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -32,16 +32,25 @@ export default async function ProductsPage({ params, searchParams }: Props) {
   const { locale: rawLocale } = await params
   const locale: Locale = parseLocale(rawLocale)
   setRequestLocale(locale)
-  const { category, sort: rawSort, page: pageParam } = await searchParams
+  const { category, sort: rawSort, page: pageParam, q } = await searchParams
   const t = await getTranslations({ locale, namespace: 'products' })
+  const tSearch = await getTranslations({ locale, namespace: 'search' })
   const payload = await getPayload()
   const currentPage = parseInt(pageParam || '1', 10)
   const sort: ProductSortKey = isProductSortKey(rawSort) ? rawSort : ProductSortKeys.Newest
+  const searchQuery = q?.trim() || ''
 
   // Build query
   const where: Where = { status: { equals: ProductStatuses.Published } }
   if (category) {
     where['categories.slug'] = { equals: category }
+  }
+  if (searchQuery) {
+    where.or = [
+      { name: { like: searchQuery } },
+      { sku: { like: searchQuery } },
+      { shortDescription: { like: searchQuery } },
+    ]
   }
 
   const products = await payload.find({
@@ -64,7 +73,11 @@ export default async function ProductsPage({ params, searchParams }: Props) {
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-8">
-      <h1 className="text-3xl font-bold mb-8">{t('title')}</h1>
+      <h1 className="text-3xl font-bold mb-2">{t('title')}</h1>
+      {searchQuery && (
+        <p className="text-neutral-500 mb-6">{tSearch('resultsFor', { query: searchQuery })}</p>
+      )}
+      {!searchQuery && <div className="mb-6" />}
 
       <div className="flex flex-col md:flex-row gap-8">
         {/* Sidebar filters */}
@@ -73,7 +86,7 @@ export default async function ProductsPage({ params, searchParams }: Props) {
           <ul className="space-y-2">
             <li>
               <a
-                href={`/${locale}/produits`}
+                href={`/${locale}/produits${searchQuery ? `?q=${encodeURIComponent(searchQuery)}` : ''}`}
                 className={`text-sm ${!category ? 'text-primary-500 font-medium' : 'text-neutral-600 hover:text-primary-500'}`}
               >
                 {t('allCategories')}
@@ -82,7 +95,7 @@ export default async function ProductsPage({ params, searchParams }: Props) {
             {categories.docs.map((cat) => (
               <li key={cat.id}>
                 <a
-                  href={`/${locale}/produits?category=${cat.slug}`}
+                  href={`/${locale}/produits?category=${cat.slug}${searchQuery ? `&q=${encodeURIComponent(searchQuery)}` : ''}`}
                   className={`text-sm ${category === cat.slug ? 'text-primary-500 font-medium' : 'text-neutral-600 hover:text-primary-500'}`}
                 >
                   {cat.name}
@@ -104,7 +117,7 @@ export default async function ProductsPage({ params, searchParams }: Props) {
               {([ProductSortKeys.Newest, ProductSortKeys.PriceAsc, ProductSortKeys.PriceDesc, ProductSortKeys.Name] as const).map((s) => (
                 <a
                   key={s}
-                  href={`/${locale}/produits?${category ? `category=${category}&` : ''}sort=${s}`}
+                  href={`/${locale}/produits?${category ? `category=${category}&` : ''}${searchQuery ? `q=${encodeURIComponent(searchQuery)}&` : ''}sort=${s}`}
                   className={`${sort === s ? 'text-primary-500 font-medium' : 'text-neutral-600 hover:text-primary-500'}`}
                 >
                   {t(`sort${s.charAt(0).toUpperCase() + s.slice(1)}`)}
@@ -123,7 +136,7 @@ export default async function ProductsPage({ params, searchParams }: Props) {
                   {Array.from({ length: products.totalPages }, (_, i) => i + 1).map((p) => (
                     <a
                       key={p}
-                      href={`/${locale}/produits?${category ? `category=${category}&` : ''}${sort !== ProductSortKeys.Newest ? `sort=${sort}&` : ''}page=${p}`}
+                      href={`/${locale}/produits?${category ? `category=${category}&` : ''}${searchQuery ? `q=${encodeURIComponent(searchQuery)}&` : ''}${sort !== ProductSortKeys.Newest ? `sort=${sort}&` : ''}page=${p}`}
                       className={`w-10 h-10 flex items-center justify-center rounded-lg text-sm ${
                         p === currentPage
                           ? 'bg-primary-500 text-white'

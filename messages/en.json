@@ -159,5 +159,43 @@
     "accept": "Accept",
     "decline": "Decline",
     "learnMore": "Learn more"
+  },
+  "error": {
+    "title": "Something went wrong",
+    "description": "An unexpected error occurred. Please try again.",
+    "retry": "Try again",
+    "backHome": "Back to home"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you're looking for doesn't exist or has been moved.",
+    "backHome": "Back to home",
+    "browseCatalog": "Browse catalog"
+  },
+  "auth": {
+    "loginTitle": "Login",
+    "registerTitle": "Create an account",
+    "resetTitle": "Forgot password",
+    "email": "Email address",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "loginCta": "Sign in",
+    "registerCta": "Create my account",
+    "resetCta": "Send reset link",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "forgotPassword": "Forgot your password?",
+    "resetSuccess": "If an account exists with this email address, you will receive a reset link.",
+    "resetDescription": "Enter your email address and we'll send you a link to reset your password.",
+    "loginError": "Invalid email or password.",
+    "registerError": "Could not create account. Please check your information.",
+    "passwordMismatch": "Passwords do not match."
+  },
+  "search": {
+    "resultsFor": "Results for \"{query}\"",
+    "noResultsFor": "No results for \"{query}\"",
+    "placeholder": "Search for a product..."
   }
 }

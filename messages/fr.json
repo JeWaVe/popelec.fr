@@ -159,5 +159,43 @@
     "accept": "Accepter",
     "decline": "Refuser",
     "learnMore": "En savoir plus"
+  },
+  "error": {
+    "title": "Une erreur est survenue",
+    "description": "Quelque chose s'est mal passé. Veuillez réessayer.",
+    "retry": "Réessayer",
+    "backHome": "Retour à l'accueil"
+  },
+  "notFound": {
+    "title": "Page introuvable",
+    "description": "La page que vous cherchez n'existe pas ou a été déplacée.",
+    "backHome": "Retour à l'accueil",
+    "browseCatalog": "Parcourir le catalogue"
+  },
+  "auth": {
+    "loginTitle": "Connexion",
+    "registerTitle": "Créer un compte",
+    "resetTitle": "Mot de passe oublié",
+    "email": "Adresse email",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "loginCta": "Se connecter",
+    "registerCta": "Créer mon compte",
+    "resetCta": "Envoyer le lien",
+    "noAccount": "Pas encore de compte ?",
+    "hasAccount": "Déjà un compte ?",
+    "forgotPassword": "Mot de passe oublié ?",
+    "resetSuccess": "Si un compte existe avec cette adresse email, vous recevrez un lien de réinitialisation.",
+    "resetDescription": "Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
+    "loginError": "Email ou mot de passe incorrect.",
+    "registerError": "Impossible de créer le compte. Vérifiez vos informations.",
+    "passwordMismatch": "Les mots de passe ne correspondent pas."
+  },
+  "search": {
+    "resultsFor": "Résultats pour « {query} »",
+    "noResultsFor": "Aucun résultat pour « {query} »",
+    "placeholder": "Rechercher un produit..."
   }
 }

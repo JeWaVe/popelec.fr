@@ -19,6 +19,12 @@ export const routing = defineRouting({
     '/compte': { fr: '/compte', en: '/account' },
     '/compte/commandes': { fr: '/compte/commandes', en: '/account/orders' },
     '/compte/devis': { fr: '/compte/devis', en: '/account/quotes' },
+    '/compte/connexion': { fr: '/compte/connexion', en: '/account/login' },
+    '/compte/inscription': { fr: '/compte/inscription', en: '/account/register' },
+    '/compte/mot-de-passe-oublie': {
+      fr: '/compte/mot-de-passe-oublie',
+      en: '/account/forgot-password',
+    },
     '/mentions-legales': { fr: '/mentions-legales', en: '/legal-notice' },
     '/cgv': { fr: '/cgv', en: '/terms' },
     '/politique-confidentialite': {
