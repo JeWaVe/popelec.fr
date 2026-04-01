@@ -6,6 +6,7 @@ import { ProductGrid } from '@/components/products/ProductGrid'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import type { Metadata } from 'next'
+import type { Product } from '@/payload-types'
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>
@@ -56,9 +57,9 @@ export default async function ProductDetailPage({ params }: Props) {
 
   // Fetch related products
   let relatedProducts: typeof result.docs = []
-  if (product.relatedProducts && (product.relatedProducts as any[]).length > 0) {
-    const relatedIds = (product.relatedProducts as any[]).map((p: any) =>
-      typeof p === 'string' ? p : p.id
+  if (product.relatedProducts && product.relatedProducts.length > 0) {
+    const relatedIds = product.relatedProducts.map((p) =>
+      typeof p === 'number' ? p : p.id
     )
     const relatedResult = await payload.find({
       collection: 'products',
@@ -71,8 +72,9 @@ export default async function ProductDetailPage({ params }: Props) {
   }
 
   // Group specs by group name
-  const specGroups = (product.specs || []).reduce(
-    (acc: Record<string, typeof product.specs>, spec: any) => {
+  type Spec = NonNullable<Product['specs']>[number]
+  const specGroups = (product.specs || []).reduce<Record<string, Spec[]>>(
+    (acc, spec) => {
       const group = spec.group || 'Général'
       if (!acc[group]) acc[group] = []
       acc[group].push(spec)
@@ -82,8 +84,8 @@ export default async function ProductDetailPage({ params }: Props) {
   )
 
   const mainImage = product.images?.[0]
-  const mainImageUrl =
-    (mainImage?.image as any)?.sizes?.product?.url || (mainImage?.image as any)?.url
+  const mainMedia = mainImage && typeof mainImage.image !== 'number' ? mainImage.image : null
+  const mainImageUrl = mainMedia?.sizes?.product?.url || mainMedia?.url
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-8">
@@ -120,8 +122,9 @@ export default async function ProductDetailPage({ params }: Props) {
           {/* Thumbnails */}
           {product.images && product.images.length > 1 && (
             <div className="flex gap-2 overflow-x-auto">
-              {product.images.map((img: any, i: number) => {
-                const thumbUrl = img.image?.sizes?.thumbnail?.url || img.image?.url
+              {product.images.map((img, i) => {
+                const imgMedia = typeof img.image !== 'number' ? img.image : null
+                const thumbUrl = imgMedia?.sizes?.thumbnail?.url || imgMedia?.url
                 return (
                   <div
                     key={i}
@@ -204,7 +207,7 @@ export default async function ProductDetailPage({ params }: Props) {
                   sku: product.sku,
                   priceHT: product.pricing.priceHT,
                   tvaRate: tvaRate,
-                  image: mainImageUrl,
+                  image: mainImageUrl ?? undefined,
                 }}
               />
             </div>
@@ -241,7 +244,7 @@ export default async function ProductDetailPage({ params }: Props) {
                   {group}
                 </h3>
                 <dl className="space-y-1">
-                  {(specs as any[]).map((spec: any, i: number) => (
+                  {specs.map((spec, i) => (
                     <div key={i} className="flex justify-between text-sm py-1 border-b border-neutral-100">
                       <dt className="text-neutral-600">{spec.label}</dt>
                       <dd className="font-medium text-neutral-900">
@@ -259,10 +262,12 @@ export default async function ProductDetailPage({ params }: Props) {
               <div className="mt-6">
                 <h2 className="text-xl font-bold mb-4">{t('datasheets')}</h2>
                 <ul className="space-y-2">
-                  {product.datasheets.map((ds: any, i: number) => (
+                  {product.datasheets.map((ds, i) => {
+                    const fileMedia = typeof ds.file !== 'number' ? ds.file : null
+                    return (
                     <li key={i}>
                       <a
-                        href={ds.file?.url}
+                        href={fileMedia?.url || '#'}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-2 text-primary-500 hover:underline text-sm"
@@ -273,7 +278,8 @@ export default async function ProductDetailPage({ params }: Props) {
                         {ds.title} ({t('download')})
                       </a>
                     </li>
-                  ))}
+                    )
+                  })}
                 </ul>
               </div>
             )}
@@ -285,7 +291,7 @@ export default async function ProductDetailPage({ params }: Props) {
       {relatedProducts.length > 0 && (
         <div className="mt-12 border-t border-neutral-200 pt-8">
           <h2 className="text-xl font-bold mb-6">{t('relatedProducts')}</h2>
-          <ProductGrid products={relatedProducts as any} locale={locale} />
+          <ProductGrid products={relatedProducts} locale={locale} />
         </div>
       )}
     </div>

@@ -119,7 +119,7 @@ export async function importFromExcel(
       })
 
       // Resolve category if provided
-      let categoryIds: string[] = []
+      let categoryIds: number[] = []
       if (mapped.category) {
         const catName = String(mapped.category).trim()
         const catResult = await payload.find({
@@ -128,19 +128,19 @@ export async function importFromExcel(
           limit: 1,
         })
         if (catResult.docs.length > 0) {
-          categoryIds = [String(catResult.docs[0].id)]
+          categoryIds = [catResult.docs[0].id]
         }
       }
 
-      const productData: Record<string, unknown> = {
+      const productData = {
         name,
         slug,
         sku,
-        status: 'draft',
+        status: 'draft' as const,
         shortDescription: mapped.shortDescription ? String(mapped.shortDescription) : undefined,
         pricing: {
           priceHT,
-          tvaRate: '20',
+          tvaRate: '20' as const,
         },
         stock: {
           quantity: stockQuantity,
@@ -150,23 +150,22 @@ export async function importFromExcel(
         physical: {
           weight: mapped.weight ? parseFloat(String(mapped.weight)) : undefined,
         },
-      }
-
-      if (categoryIds.length > 0) {
-        productData.categories = categoryIds
+        ...(categoryIds.length > 0 ? { categories: categoryIds } : {}),
       }
 
       if (existing.docs.length > 0) {
         await payload.update({
           collection: 'products',
           id: existing.docs[0].id,
-          data: productData as any,
+          draft: true,
+          data: productData,
         })
         result.updated++
       } else {
         await payload.create({
           collection: 'products',
-          data: productData as any,
+          draft: true,
+          data: productData,
         })
         result.created++
       }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslations, useLocale } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import { useState } from 'react'
@@ -14,7 +14,6 @@ const CATEGORIES = [
 
 export function Header() {
   const t = useTranslations('nav')
-  const locale = useLocale()
   const [mobileOpen, setMobileOpen] = useState(false)
 
   const catHref = (slug: string) =>

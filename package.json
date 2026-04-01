@@ -9,6 +9,8 @@
     "start": "next start",
     "generate:types": "payload generate:types",
     "generate:importmap": "payload generate:importmap",
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc --noEmit",
     "migrate": "payload migrate",
     "migrate:create": "payload migrate:create"
   },
@@ -30,12 +32,16 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@tailwindcss/postcss": "^4.0.0",
+    "@types/eslint__js": "^8.42.3",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "eslint": "^10.1.0",
     "postcss": "^8.0.0",
     "tailwindcss": "^4.0.0",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "typescript-eslint": "^8.58.0"
   }
 }

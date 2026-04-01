@@ -1,30 +1,10 @@
 import { ProductCard } from './ProductCard'
+import type { Product } from '@/payload-types'
+
+type ProductForGrid = Pick<Product, 'id' | 'slug' | 'name' | 'shortDescription' | 'pricing' | 'stock' | 'images'>
 
 interface ProductGridProps {
-  products: Array<{
-    id: string
-    slug: string
-    name: string
-    shortDescription?: string | null
-    pricing: {
-      priceHT: number
-      tvaRate: string
-      compareAtPrice?: number | null
-    }
-    stock: {
-      quantity: number
-      trackStock: boolean
-    }
-    images: Array<{
-      image: {
-        url?: string
-        sizes?: {
-          card?: { url?: string }
-        }
-      }
-      alt?: string | null
-    }>
-  }>
+  products: ProductForGrid[]
   locale: string
 }
 

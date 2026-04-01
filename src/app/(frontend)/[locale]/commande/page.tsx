@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl'
 import { useCart } from '@/components/cart/CartProvider'
-import { formatPrice, calculateTTC } from '@/lib/formatPrice'
+import { formatPrice } from '@/lib/formatPrice'
 import { useLocale } from 'next-intl'
 import { useState } from 'react'
 import { Link } from '@/i18n/navigation'
@@ -11,7 +11,7 @@ export default function CheckoutPage() {
   const t = useTranslations('checkout')
   const tCart = useTranslations('cart')
   const tCommon = useTranslations('common')
-  const { items, subtotalHT, itemCount } = useCart()
+  const { items, subtotalHT } = useCart()
   const locale = useLocale()
   const [sameAsShipping, setSameAsShipping] = useState(true)
   const [loading, setLoading] = useState(false)

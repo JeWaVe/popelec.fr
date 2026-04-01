@@ -22,8 +22,6 @@ export default async function ProductsPage({ params, searchParams }: Props) {
   setRequestLocale(locale)
   const { category, sort, page: pageParam } = await searchParams
   const t = await getTranslations({ locale, namespace: 'products' })
-  const tCommon = await getTranslations({ locale, namespace: 'common' })
-
   const payload = await getPayload()
   const currentPage = parseInt(pageParam || '1', 10)
 
@@ -104,7 +102,7 @@ export default async function ProductsPage({ params, searchParams }: Props) {
                   href={`/${locale}/produits?${category ? `category=${category}&` : ''}sort=${s}`}
                   className={`${sort === s || (!sort && s === 'newest') ? 'text-primary-500 font-medium' : 'text-neutral-600 hover:text-primary-500'}`}
                 >
-                  {t(`sort${s.charAt(0).toUpperCase() + s.slice(1)}` as any)}
+                  {t(`sort${s.charAt(0).toUpperCase() + s.slice(1)}`)}
                 </a>
               ))}
             </div>
@@ -112,7 +110,7 @@ export default async function ProductsPage({ params, searchParams }: Props) {
 
           {products.docs.length > 0 ? (
             <>
-              <ProductGrid products={products.docs as any} locale={locale} />
+              <ProductGrid products={products.docs} locale={locale} />
 
               {/* Pagination */}
               {products.totalPages > 1 && (

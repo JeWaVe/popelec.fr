@@ -9,9 +9,8 @@ type Props = {
 export default async function ConfirmationPage({ params, searchParams }: Props) {
   const { locale } = await params
   setRequestLocale(locale)
-  const { session_id } = await searchParams
+  const _searchParams = await searchParams
   const t = await getTranslations({ locale, namespace: 'confirmation' })
-  const tCommon = await getTranslations({ locale, namespace: 'common' })
 
   return (
     <div className="max-w-2xl mx-auto px-6 py-16 text-center">

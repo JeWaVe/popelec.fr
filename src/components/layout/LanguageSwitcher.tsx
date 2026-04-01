@@ -10,7 +10,8 @@ export function LanguageSwitcher() {
 
   const switchLocale = () => {
     const newLocale = locale === 'fr' ? 'en' : 'fr'
-    router.replace(pathname as any, { locale: newLocale })
+    // usePathname returns a typed pathname but dynamic routes widen to string
+    router.replace(pathname as Parameters<typeof router.replace>[0], { locale: newLocale })
   }
 
   return (

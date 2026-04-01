@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl'
 import { useCart } from '@/components/cart/CartProvider'
-import { formatPrice, calculateTTC } from '@/lib/formatPrice'
+import { formatPrice } from '@/lib/formatPrice'
 import { useLocale } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import Image from 'next/image'
@@ -43,7 +43,6 @@ export default function CartPage() {
         {/* Items */}
         <div className="lg:col-span-2 space-y-4">
           {items.map((item) => {
-            const itemTTC = calculateTTC(item.priceHT, item.tvaRate)
             return (
               <div
                 key={item.productId}

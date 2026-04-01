@@ -49,27 +49,30 @@ export async function POST(req: NextRequest) {
         })
 
         // Create order
+        const customerId = parseInt(session.metadata?.userId || '0', 10)
+        const orderItems = await Promise.all(lineItems.data.map(async (item) => {
+          // Retrieve product metadata from the Stripe Price's product
+          let payloadId = 0
+          if (item.price?.product && typeof item.price.product === 'string') {
+            const stripeProduct = await stripe.products.retrieve(item.price.product)
+            payloadId = parseInt(stripeProduct.metadata?.payloadId || '0', 10)
+          }
+          return {
+            productName: item.description || '',
+            sku: '',
+            quantity: item.quantity || 1,
+            priceHT: item.amount_total || 0,
+            tvaRate: '20',
+            product: payloadId,
+          }
+        }))
+
         await payload.create({
           collection: 'orders',
           data: {
             orderNumber,
-            customer: session.metadata?.userId || '',
-            items: await Promise.all(lineItems.data.map(async (item) => {
-              // Retrieve product metadata from the Stripe Price's product
-              let payloadId = ''
-              if (item.price?.product && typeof item.price.product === 'string') {
-                const stripeProduct = await stripe.products.retrieve(item.price.product)
-                payloadId = stripeProduct.metadata?.payloadId || ''
-              }
-              return {
-                productName: item.description || '',
-                sku: '',
-                quantity: item.quantity || 1,
-                priceHT: item.amount_total || 0,
-                tvaRate: '20',
-                product: payloadId,
-              }
-            })),
+            customer: customerId,
+            items: orderItems,
             totals: {
               subtotalHT: session.amount_subtotal || 0,
               tva: (session.amount_total || 0) - (session.amount_subtotal || 0),
@@ -82,7 +85,7 @@ export async function POST(req: NextRequest) {
               typeof session.payment_intent === 'string'
                 ? session.payment_intent
                 : session.payment_intent?.id || '',
-          } as any,
+          },
         })
 
         break

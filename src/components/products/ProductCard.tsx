@@ -1,41 +1,24 @@
 import { useTranslations } from 'next-intl'
 import { formatPrice, calculateTTC } from '@/lib/formatPrice'
 import Image from 'next/image'
+import type { Product } from '@/payload-types'
+
+type ProductForCard = Pick<Product, 'slug' | 'name' | 'shortDescription' | 'pricing' | 'stock' | 'images'>
 
 interface ProductCardProps {
-  product: {
-    slug: string
-    name: string
-    shortDescription?: string | null
-    pricing: {
-      priceHT: number
-      tvaRate: string
-      compareAtPrice?: number | null
-    }
-    stock: {
-      quantity: number
-      trackStock: boolean
-    }
-    images: Array<{
-      image: {
-        url?: string
-        sizes?: {
-          card?: { url?: string }
-        }
-      }
-      alt?: string | null
-    }>
-  }
+  product: ProductForCard
   locale: string
 }
 
 export function ProductCard({ product, locale }: ProductCardProps) {
   const t = useTranslations('common')
-  const imageUrl = product.images?.[0]?.image?.sizes?.card?.url || product.images?.[0]?.image?.url
-  const imageAlt = product.images?.[0]?.alt || product.name
+  const firstImage = product.images?.[0]
+  const media = firstImage && typeof firstImage.image !== 'number' ? firstImage.image : null
+  const imageUrl = media?.sizes?.card?.url || media?.url
+  const imageAlt = firstImage?.alt || product.name
   const priceHT = product.pricing.priceHT
-  const priceTTC = calculateTTC(priceHT, product.pricing.tvaRate)
-  const inStock = !product.stock.trackStock || product.stock.quantity > 0
+  const priceTTC = calculateTTC(priceHT, product.pricing.tvaRate ?? '20')
+  const inStock = !product.stock?.trackStock || (product.stock?.quantity ?? 0) > 0
 
   return (
     <a

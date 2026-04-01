@@ -91,7 +91,7 @@ export default async function CategoryPage({ params }: Props) {
       )}
 
       {products.docs.length > 0 ? (
-        <ProductGrid products={products.docs as any} locale={locale} />
+        <ProductGrid products={products.docs} locale={locale} />
       ) : (
         <p className="text-neutral-500 text-center py-12">{t('noResults')}</p>
       )}

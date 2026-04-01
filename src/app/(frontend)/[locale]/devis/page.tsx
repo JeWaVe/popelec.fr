@@ -14,9 +14,9 @@ export default function QuotePage() {
     setItems([...items, { productDescription: '', quantity: 1 }])
   }
 
-  const updateItem = (index: number, field: string, value: string | number) => {
+  const updateItem = (index: number, field: keyof typeof items[number], value: string | number) => {
     const newItems = [...items]
-    ;(newItems[index] as any)[field] = value
+    newItems[index] = { ...newItems[index], [field]: value }
     setItems(newItems)
   }
 
