@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { setRequestLocale } from 'next-intl/server'
 import { getPayload } from '@/lib/payload'
 import { parseLocale, Locales } from '@/types/enums/locale'

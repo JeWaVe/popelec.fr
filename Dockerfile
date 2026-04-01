@@ -10,6 +10,9 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+# Dummy values so Payload config compiles without a live database
+ENV PAYLOAD_SECRET=build-secret-placeholder
+ENV DATABASE_URI=postgres://placeholder:placeholder@localhost:5432/placeholder
 RUN npm run build
 
 ## Stage 3: Production

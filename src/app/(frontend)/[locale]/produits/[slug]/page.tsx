@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { getPayload } from '@/lib/payload'
 import { formatPrice, calculateTTC } from '@/lib/formatPrice'
