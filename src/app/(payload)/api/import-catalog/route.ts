@@ -2,9 +2,13 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from '@/lib/payload'
 import { importFromExcel } from '@/lib/importCatalog'
 import { UserRoles } from '@/types/enums/user-role'
+import { rateLimit, getClientIp } from '@/lib/rateLimit'
 
 export async function POST(req: NextRequest) {
   try {
+    const blocked = rateLimit(getClientIp(req), 'import', { limit: 5, windowSec: 60 })
+    if (blocked) return blocked
+
     const payload = await getPayload()
 
     // Check admin auth

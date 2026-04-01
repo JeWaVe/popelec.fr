@@ -30,8 +30,14 @@ export default async function LocaleLayout({
       <body className={`${inter.className} bg-white text-neutral-900`}>
         <NextIntlClientProvider messages={messages}>
           <CartProvider>
+            <a
+              href="#main-content"
+              className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-primary-500 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg"
+            >
+              Skip to content
+            </a>
             <Header />
-            <main className="min-h-screen">{children}</main>
+            <main id="main-content" className="min-h-screen">{children}</main>
             <Footer />
             <CookieBanner />
           </CartProvider>

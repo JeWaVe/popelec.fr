@@ -3,9 +3,13 @@ import { getPayload } from '@/lib/payload'
 import { stripe } from '@/lib/stripe'
 import { parseLocale, Locales } from '@/types/enums/locale'
 import { ProductStatuses } from '@/types/enums/product-status'
+import { rateLimit, getClientIp } from '@/lib/rateLimit'
 
 export async function POST(req: NextRequest) {
   try {
+    const blocked = rateLimit(getClientIp(req), 'checkout', { limit: 10, windowSec: 60 })
+    if (blocked) return blocked
+
     if (!process.env.STRIPE_SECRET_KEY) {
       return NextResponse.json({ error: 'Stripe non configuré' }, { status: 500 })
     }

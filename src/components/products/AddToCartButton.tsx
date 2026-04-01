@@ -26,9 +26,10 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
     <div className="flex flex-col gap-3">
       <div className="flex items-center gap-3">
         <label className="text-sm font-medium text-neutral-700">{tProduct('selectQuantity')}</label>
-        <div className="flex items-center border border-neutral-300 rounded-lg">
+        <div className="flex items-center border border-neutral-300 rounded-lg" role="group" aria-label={tProduct('selectQuantity')}>
           <button
             onClick={() => setQuantity(Math.max(1, quantity - 1))}
+            aria-label="Decrease quantity"
             className="px-3 py-2 text-neutral-600 hover:text-primary-500 transition-colors"
           >
             -
@@ -37,11 +38,13 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
             type="number"
             value={quantity}
             onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+            aria-label={tProduct('selectQuantity')}
             className="w-16 text-center border-x border-neutral-300 py-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
             min="1"
           />
           <button
             onClick={() => setQuantity(quantity + 1)}
+            aria-label="Increase quantity"
             className="px-3 py-2 text-neutral-600 hover:text-primary-500 transition-colors"
           >
             +
