@@ -36,7 +36,7 @@ export function Header() {
       {/* Top bar */}
       <div className="bg-primary-500 text-white text-sm py-1.5 px-6">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <span className="hidden sm:inline">Électricité Populaire d&apos;Aucamville - Direct usine, qualité contrôlée</span>
+          <span className="hidden sm:inline">{t('tagline')}</span>
           <span className="sm:hidden">popelec.fr</span>
           <LanguageSwitcher />
         </div>

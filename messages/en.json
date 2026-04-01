@@ -34,7 +34,8 @@
     "cart": "Cart",
     "login": "Login",
     "logout": "Logout",
-    "register": "Create account"
+    "register": "Create account",
+    "tagline": "Électricité Populaire d'Aucamville - Direct from factory, quality controlled"
   },
   "home": {
     "heroTitle": "Industrial electrical equipment, direct from factory",
