@@ -1,0 +1,218 @@
+.wrapper {
+  padding: 0 20px 40px;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--theme-text);
+  margin: 32px 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--theme-elevation-150);
+}
+
+/* KPI metrics grid */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.metricCard {
+  background: var(--theme-elevation-50);
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.metricLabel {
+  font-size: 13px;
+  color: var(--theme-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metricValue {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--theme-text);
+}
+
+.metricAccent {
+  color: #FF6B00;
+}
+
+/* Tables */
+.tableWrapper {
+  overflow-x: auto;
+  margin-bottom: 8px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.table th {
+  text-align: left;
+  padding: 10px 12px;
+  font-weight: 600;
+  color: var(--theme-dim);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--theme-elevation-150);
+}
+
+.table td {
+  padding: 10px 12px;
+  color: var(--theme-text);
+  border-bottom: 1px solid var(--theme-elevation-100);
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.table a {
+  color: var(--theme-text);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.table a:hover {
+  text-decoration: underline;
+}
+
+/* Status badges */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.badgePending {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.badgePaid {
+  background: #D1FAE5;
+  color: #065F46;
+}
+
+.badgeProcessing {
+  background: #DBEAFE;
+  color: #1E40AF;
+}
+
+.badgeShipped {
+  background: #E0E7FF;
+  color: #3730A3;
+}
+
+.badgeDelivered {
+  background: #D1FAE5;
+  color: #065F46;
+}
+
+.badgeCancelled {
+  background: #FEE2E2;
+  color: #991B1B;
+}
+
+.badgeRefunded {
+  background: #F3E8FF;
+  color: #6B21A8;
+}
+
+.badgeNew {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.badgeSent {
+  background: #DBEAFE;
+  color: #1E40AF;
+}
+
+.badgeAccepted {
+  background: #D1FAE5;
+  color: #065F46;
+}
+
+.badgeRejected {
+  background: #FEE2E2;
+  color: #991B1B;
+}
+
+/* Low stock alerts */
+.alertRow {
+  background: #FEF3C7;
+}
+
+.alertRowZero {
+  background: #FEE2E2;
+}
+
+/* Quick stats */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.statsCard {
+  background: var(--theme-elevation-50);
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: 8px;
+  padding: 16px 20px;
+}
+
+.statsCardTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--theme-text);
+  margin-bottom: 12px;
+}
+
+.statsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.statsRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.statsLabel {
+  color: var(--theme-dim);
+}
+
+.statsValue {
+  font-weight: 600;
+  color: var(--theme-text);
+}
+
+/* Empty state */
+.empty {
+  color: var(--theme-dim);
+  font-size: 14px;
+  padding: 16px 0;
+}
