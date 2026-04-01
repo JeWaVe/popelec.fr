@@ -197,5 +197,10 @@
     "resultsFor": "Résultats pour « {query} »",
     "noResultsFor": "Aucun résultat pour « {query} »",
     "placeholder": "Rechercher un produit..."
+  },
+  "comingSoon": {
+    "title": "Bientôt disponible",
+    "message": "Notre site est en cours de préparation. Revenez bientôt pour découvrir notre catalogue de matériel électrique industriel.",
+    "contact": "Contactez-nous"
   }
 }

@@ -197,5 +197,10 @@
     "resultsFor": "Results for \"{query}\"",
     "noResultsFor": "No results for \"{query}\"",
     "placeholder": "Search for a product..."
+  },
+  "comingSoon": {
+    "title": "Coming Soon",
+    "message": "Our site is under preparation. Come back soon to discover our industrial electrical equipment catalog.",
+    "contact": "Contact us"
   }
 }
