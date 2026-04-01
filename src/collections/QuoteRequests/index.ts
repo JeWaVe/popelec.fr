@@ -1,4 +1,15 @@
 import type { CollectionConfig } from 'payload'
+import { QuoteRequestStatuses, type QuoteRequestStatus } from '@/types/enums/quote-request-status'
+import { UserRoles } from '@/types/enums/user-role'
+import { enumToPayloadOptions } from '@/types/payload-options'
+
+const QUOTE_REQUEST_STATUS_LABELS: Record<QuoteRequestStatus, string> = {
+  [QuoteRequestStatuses.New]: 'Nouveau',
+  [QuoteRequestStatuses.Processing]: 'En cours',
+  [QuoteRequestStatuses.Sent]: 'Devis envoyé',
+  [QuoteRequestStatuses.Accepted]: 'Accepté',
+  [QuoteRequestStatuses.Rejected]: 'Refusé',
+}
 
 export const QuoteRequests: CollectionConfig = {
   slug: 'quote-requests',
@@ -9,13 +20,13 @@ export const QuoteRequests: CollectionConfig = {
   },
   access: {
     read: ({ req: { user } }) => {
-      if (user?.role === 'admin') return true
+      if (user?.role === UserRoles.Admin) return true
       if (user) return { user: { equals: user.id } }
       return false
     },
     create: () => true,
-    update: ({ req: { user } }) => user?.role === 'admin',
-    delete: ({ req: { user } }) => user?.role === 'admin',
+    update: ({ req: { user } }) => user?.role === UserRoles.Admin,
+    delete: ({ req: { user } }) => user?.role === UserRoles.Admin,
   },
   fields: [
     {
@@ -71,14 +82,8 @@ export const QuoteRequests: CollectionConfig = {
     {
       name: 'status',
       type: 'select',
-      defaultValue: 'new',
-      options: [
-        { label: 'Nouveau', value: 'new' },
-        { label: 'En cours', value: 'processing' },
-        { label: 'Devis envoyé', value: 'sent' },
-        { label: 'Accepté', value: 'accepted' },
-        { label: 'Refusé', value: 'rejected' },
-      ],
+      defaultValue: QuoteRequestStatuses.New,
+      options: enumToPayloadOptions(QUOTE_REQUEST_STATUS_LABELS),
       admin: { position: 'sidebar' },
     },
     {
@@ -86,7 +91,7 @@ export const QuoteRequests: CollectionConfig = {
       type: 'textarea',
       admin: { description: 'Notes internes (non visibles par le client)' },
       access: {
-        read: ({ req }) => req.user?.role === 'admin',
+        read: ({ req }) => req.user?.role === UserRoles.Admin,
       },
     },
     {

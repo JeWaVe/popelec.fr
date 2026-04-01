@@ -1,11 +1,12 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { useCart, type CartItem } from '@/components/cart/CartProvider'
+import { useCart } from '@/components/cart/CartProvider'
 import { useState } from 'react'
+import type { DomainCartItem } from '@/types/cart'
 
 interface AddToCartButtonProps {
-  product: Omit<CartItem, 'quantity'>
+  product: Omit<DomainCartItem, 'quantity'>
 }
 
 export function AddToCartButton({ product }: AddToCartButtonProps) {

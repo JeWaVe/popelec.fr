@@ -6,18 +6,20 @@ import { formatPrice } from '@/lib/formatPrice'
 import { useLocale } from 'next-intl'
 import { useState } from 'react'
 import { Link } from '@/i18n/navigation'
+import { priceCents } from '@/types/money'
+import type { Locale } from '@/types/enums/locale'
 
 export default function CheckoutPage() {
   const t = useTranslations('checkout')
   const tCart = useTranslations('cart')
   const tCommon = useTranslations('common')
   const { items, subtotalHT } = useCart()
-  const locale = useLocale()
+  const locale = useLocale() as Locale
   const [sameAsShipping, setSameAsShipping] = useState(true)
   const [loading, setLoading] = useState(false)
 
-  const tva = Math.round(subtotalHT * 0.2)
-  const totalTTC = subtotalHT + tva
+  const tva = priceCents(Math.round(subtotalHT * 0.2))
+  const totalTTC = priceCents(subtotalHT + tva)
 
   if (items.length === 0) {
     return (
@@ -160,7 +162,7 @@ export default function CheckoutPage() {
                     {item.name} x{item.quantity}
                   </span>
                   <span className="font-medium whitespace-nowrap">
-                    {formatPrice(item.priceHT * item.quantity, locale)}
+                    {formatPrice(priceCents(item.priceHT * item.quantity), locale)}
                   </span>
                 </div>
               ))}

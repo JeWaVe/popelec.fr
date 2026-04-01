@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from '@/lib/payload'
 import { stripe } from '@/lib/stripe'
+import { parseLocale, Locales } from '@/types/enums/locale'
+import { ProductStatuses } from '@/types/enums/product-status'
 
 export async function POST(req: NextRequest) {
   try {
@@ -9,10 +11,11 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json()
-    const { items, locale = 'fr' } = body as {
+    const { items, locale: rawLocale = 'fr' } = body as {
       items: Array<{ productId: string; quantity: number }>
       locale: string
     }
+    const locale = parseLocale(rawLocale)
 
     if (!items || items.length === 0) {
       return NextResponse.json({ error: 'Panier vide' }, { status: 400 })
@@ -36,10 +39,10 @@ export async function POST(req: NextRequest) {
       const product = await payload.findByID({
         collection: 'products',
         id: item.productId,
-        locale: locale as 'fr' | 'en',
+        locale,
       })
 
-      if (!product || product.status !== 'published') {
+      if (!product || product.status !== ProductStatuses.Published) {
         return NextResponse.json(
           { error: `Produit ${item.productId} non disponible` },
           { status: 400 }
@@ -70,8 +73,8 @@ export async function POST(req: NextRequest) {
       })
     }
 
-    const successPath = locale === 'fr' ? '/fr/commande/confirmation' : '/en/checkout/confirmation'
-    const cancelPath = locale === 'fr' ? '/fr/panier' : '/en/cart'
+    const successPath = locale === Locales.Fr ? '/fr/commande/confirmation' : '/en/checkout/confirmation'
+    const cancelPath = locale === Locales.Fr ? '/fr/panier' : '/en/cart'
 
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
@@ -79,7 +82,7 @@ export async function POST(req: NextRequest) {
       line_items: lineItems,
       success_url: `${baseUrl}${successPath}?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}${cancelPath}`,
-      locale: locale === 'fr' ? 'fr' : 'en',
+      locale: locale === Locales.Fr ? 'fr' : 'en',
       metadata: {
         source: 'popelec',
       },

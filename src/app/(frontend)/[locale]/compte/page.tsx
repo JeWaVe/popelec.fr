@@ -1,12 +1,14 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
+import { parseLocale } from '@/types/enums/locale'
 
 type Props = {
   params: Promise<{ locale: string }>
 }
 
 export default async function AccountPage({ params }: Props) {
-  const { locale } = await params
+  const { locale: rawLocale } = await params
+  const locale = parseLocale(rawLocale)
   setRequestLocale(locale)
   const t = await getTranslations({ locale, namespace: 'account' })
 

@@ -1,4 +1,17 @@
 import type { CollectionConfig } from 'payload'
+import { OrderStatuses, type OrderStatus } from '@/types/enums/order-status'
+import { UserRoles } from '@/types/enums/user-role'
+import { enumToPayloadOptions } from '@/types/payload-options'
+
+const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
+  [OrderStatuses.Pending]: 'En attente de paiement',
+  [OrderStatuses.Paid]: 'Payé',
+  [OrderStatuses.Processing]: 'En préparation',
+  [OrderStatuses.Shipped]: 'Expédié',
+  [OrderStatuses.Delivered]: 'Livré',
+  [OrderStatuses.Cancelled]: 'Annulé',
+  [OrderStatuses.Refunded]: 'Remboursé',
+}
 
 export const Orders: CollectionConfig = {
   slug: 'orders',
@@ -9,12 +22,12 @@ export const Orders: CollectionConfig = {
   },
   access: {
     read: ({ req: { user } }) => {
-      if (user?.role === 'admin') return true
+      if (user?.role === UserRoles.Admin) return true
       if (user) return { customer: { equals: user.id } }
       return false
     },
     create: () => false,
-    update: ({ req: { user } }) => user?.role === 'admin',
+    update: ({ req: { user } }) => user?.role === UserRoles.Admin,
     delete: () => false,
   },
   fields: [
@@ -88,16 +101,8 @@ export const Orders: CollectionConfig = {
     {
       name: 'status',
       type: 'select',
-      defaultValue: 'pending',
-      options: [
-        { label: 'En attente de paiement', value: 'pending' },
-        { label: 'Payé', value: 'paid' },
-        { label: 'En préparation', value: 'processing' },
-        { label: 'Expédié', value: 'shipped' },
-        { label: 'Livré', value: 'delivered' },
-        { label: 'Annulé', value: 'cancelled' },
-        { label: 'Remboursé', value: 'refunded' },
-      ],
+      defaultValue: OrderStatuses.Pending,
+      options: enumToPayloadOptions(ORDER_STATUS_LABELS),
       admin: { position: 'sidebar' },
     },
     {

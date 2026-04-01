@@ -164,7 +164,7 @@ export interface Product {
      * Prix HT en centimes (ex: 10000 = 100,00 €)
      */
     priceHT: number;
-    tvaRate?: ('20' | '10' | '5.5') | null;
+    tvaRate?: ('10' | '20' | '5.5') | null;
     /**
      * Prix professionnel HT en centimes (optionnel)
      */

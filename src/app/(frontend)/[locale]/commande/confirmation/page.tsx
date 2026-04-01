@@ -1,5 +1,6 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
+import { parseLocale } from '@/types/enums/locale'
 
 type Props = {
   params: Promise<{ locale: string }>
@@ -7,7 +8,8 @@ type Props = {
 }
 
 export default async function ConfirmationPage({ params, searchParams }: Props) {
-  const { locale } = await params
+  const { locale: rawLocale } = await params
+  const locale = parseLocale(rawLocale)
   setRequestLocale(locale)
   const _searchParams = await searchParams
   const t = await getTranslations({ locale, namespace: 'confirmation' })

@@ -1,4 +1,20 @@
 import type { CollectionConfig } from 'payload'
+import { ProductStatuses, type ProductStatus } from '@/types/enums/product-status'
+import { TVARates, type TVARate } from '@/types/enums/tva-rate'
+import { enumToPayloadOptions } from '@/types/payload-options'
+
+const PRODUCT_STATUS_LABELS: Record<ProductStatus, string> = {
+  [ProductStatuses.Draft]: 'Brouillon',
+  [ProductStatuses.Published]: 'Publié',
+  [ProductStatuses.OutOfStock]: 'Rupture de stock',
+  [ProductStatuses.Archived]: 'Archivé',
+}
+
+const TVA_RATE_LABELS: Record<TVARate, string> = {
+  [TVARates.Standard]: '20%',
+  [TVARates.Intermediate]: '10%',
+  [TVARates.Reduced]: '5.5%',
+}
 
 export const Products: CollectionConfig = {
   slug: 'products',
@@ -35,13 +51,8 @@ export const Products: CollectionConfig = {
     {
       name: 'status',
       type: 'select',
-      defaultValue: 'draft',
-      options: [
-        { label: 'Brouillon', value: 'draft' },
-        { label: 'Publié', value: 'published' },
-        { label: 'Rupture de stock', value: 'outOfStock' },
-        { label: 'Archivé', value: 'archived' },
-      ],
+      defaultValue: ProductStatuses.Draft,
+      options: enumToPayloadOptions(PRODUCT_STATUS_LABELS),
       admin: { position: 'sidebar' },
     },
 
@@ -73,12 +84,8 @@ export const Products: CollectionConfig = {
         {
           name: 'tvaRate',
           type: 'select',
-          defaultValue: '20',
-          options: [
-            { label: '20%', value: '20' },
-            { label: '10%', value: '10' },
-            { label: '5.5%', value: '5.5' },
-          ],
+          defaultValue: TVARates.Standard,
+          options: enumToPayloadOptions(TVA_RATE_LABELS),
         },
         {
           name: 'proPrice',

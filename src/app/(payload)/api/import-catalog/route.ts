@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from '@/lib/payload'
 import { importFromExcel } from '@/lib/importCatalog'
+import { UserRoles } from '@/types/enums/user-role'
 
 export async function POST(req: NextRequest) {
   try {
@@ -8,7 +9,7 @@ export async function POST(req: NextRequest) {
 
     // Check admin auth
     const { user } = await payload.auth({ headers: req.headers })
-    if (!user || user.role !== 'admin') {
+    if (!user || user.role !== UserRoles.Admin) {
       return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
     }
 

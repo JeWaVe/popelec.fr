@@ -1,5 +1,7 @@
 import * as XLSX from 'xlsx'
 import type { Payload } from 'payload'
+import { ProductStatuses } from '@/types/enums/product-status'
+import { TVARates } from '@/types/enums/tva-rate'
 
 interface ImportResult {
   created: number
@@ -136,11 +138,11 @@ export async function importFromExcel(
         name,
         slug,
         sku,
-        status: 'draft' as const,
+        status: ProductStatuses.Draft,
         shortDescription: mapped.shortDescription ? String(mapped.shortDescription) : undefined,
         pricing: {
           priceHT,
-          tvaRate: '20' as const,
+          tvaRate: TVARates.Standard,
         },
         stock: {
           quantity: stockQuantity,

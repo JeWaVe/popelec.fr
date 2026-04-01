@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from '@/lib/payload'
 import { stripe } from '@/lib/stripe'
+import { OrderStatuses } from '@/types/enums/order-status'
+import { TVARates } from '@/types/enums/tva-rate'
 
 export async function POST(req: NextRequest) {
   try {
@@ -62,7 +64,7 @@ export async function POST(req: NextRequest) {
             sku: '',
             quantity: item.quantity || 1,
             priceHT: item.amount_total || 0,
-            tvaRate: '20',
+            tvaRate: TVARates.Standard,
             product: payloadId,
           }
         }))
@@ -79,7 +81,7 @@ export async function POST(req: NextRequest) {
               totalTTC: session.amount_total || 0,
               shipping: 0,
             },
-            status: 'paid',
+            status: OrderStatuses.Paid,
             stripeCheckoutSessionId: session.id,
             stripePaymentIntentId:
               typeof session.payment_intent === 'string'
@@ -109,7 +111,7 @@ export async function POST(req: NextRequest) {
             await payload.update({
               collection: 'orders',
               id: orders.docs[0].id,
-              data: { status: 'refunded' },
+              data: { status: OrderStatuses.Refunded },
             })
           }
         }

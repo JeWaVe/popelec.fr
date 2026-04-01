@@ -2,6 +2,8 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { getPayload } from '@/lib/payload'
 import { ProductGrid } from '@/components/products/ProductGrid'
 import { notFound } from 'next/navigation'
+import { parseLocale, type Locale } from '@/types/enums/locale'
+import { ProductStatuses } from '@/types/enums/product-status'
 import type { Metadata } from 'next'
 
 type Props = {
@@ -9,12 +11,13 @@ type Props = {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale, slug } = await params
+  const { locale: rawLocale, slug } = await params
+  const locale: Locale = parseLocale(rawLocale)
   const payload = await getPayload()
   const result = await payload.find({
     collection: 'categories',
     where: { slug: { equals: slug } },
-    locale: locale as 'fr' | 'en',
+    locale,
     limit: 1,
   })
   const category = result.docs[0]
@@ -27,7 +30,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function CategoryPage({ params }: Props) {
-  const { locale, slug } = await params
+  const { locale: rawLocale, slug } = await params
+  const locale: Locale = parseLocale(rawLocale)
   setRequestLocale(locale)
 
   const payload = await getPayload()
@@ -35,7 +39,7 @@ export default async function CategoryPage({ params }: Props) {
   const catResult = await payload.find({
     collection: 'categories',
     where: { slug: { equals: slug } },
-    locale: locale as 'fr' | 'en',
+    locale,
     limit: 1,
   })
   const category = catResult.docs[0]
@@ -44,10 +48,10 @@ export default async function CategoryPage({ params }: Props) {
   const products = await payload.find({
     collection: 'products',
     where: {
-      status: { equals: 'published' },
+      status: { equals: ProductStatuses.Published },
       categories: { contains: category.id },
     },
-    locale: locale as 'fr' | 'en',
+    locale,
     limit: 24,
     depth: 2,
   })
@@ -57,7 +61,7 @@ export default async function CategoryPage({ params }: Props) {
     collection: 'categories',
     where: { parent: { equals: category.id } },
     sort: 'sortOrder',
-    locale: locale as 'fr' | 'en',
+    locale,
     limit: 20,
   })
 

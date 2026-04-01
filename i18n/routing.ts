@@ -1,8 +1,9 @@
 import { defineRouting } from 'next-intl/routing'
+import { LOCALE_VALUES, Locales } from '@/types/enums/locale'
 
 export const routing = defineRouting({
-  locales: ['fr', 'en'],
-  defaultLocale: 'fr',
+  locales: LOCALE_VALUES,
+  defaultLocale: Locales.Fr,
   pathnames: {
     '/': '/',
     '/produits': { fr: '/produits', en: '/products' },

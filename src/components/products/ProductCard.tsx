@@ -2,12 +2,16 @@ import { useTranslations } from 'next-intl'
 import { formatPrice, calculateTTC } from '@/lib/formatPrice'
 import Image from 'next/image'
 import type { Product } from '@/payload-types'
+import type { Locale } from '@/types/enums/locale'
+import type { PriceCents } from '@/types/money'
+import type { TVARate } from '@/types/enums/tva-rate'
+import { TVARates } from '@/types/enums/tva-rate'
 
 type ProductForCard = Pick<Product, 'slug' | 'name' | 'shortDescription' | 'pricing' | 'stock' | 'images'>
 
 interface ProductCardProps {
   product: ProductForCard
-  locale: string
+  locale: Locale
 }
 
 export function ProductCard({ product, locale }: ProductCardProps) {
@@ -16,8 +20,8 @@ export function ProductCard({ product, locale }: ProductCardProps) {
   const media = firstImage && typeof firstImage.image !== 'number' ? firstImage.image : null
   const imageUrl = media?.sizes?.card?.url || media?.url
   const imageAlt = firstImage?.alt || product.name
-  const priceHT = product.pricing.priceHT
-  const priceTTC = calculateTTC(priceHT, product.pricing.tvaRate ?? '20')
+  const priceHT = product.pricing.priceHT as PriceCents
+  const priceTTC = calculateTTC(priceHT, (product.pricing.tvaRate ?? TVARates.Standard) as TVARate)
   const inStock = !product.stock?.trackStock || (product.stock?.quantity ?? 0) > 0
 
   return (
@@ -72,7 +76,7 @@ export function ProductCard({ product, locale }: ProductCardProps) {
           </span>
           {product.pricing.compareAtPrice && product.pricing.compareAtPrice > priceHT && (
             <span className="text-sm text-neutral-400 line-through">
-              {formatPrice(product.pricing.compareAtPrice, locale)}
+              {formatPrice(product.pricing.compareAtPrice as PriceCents, locale)}
             </span>
           )}
         </div>

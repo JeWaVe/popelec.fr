@@ -1,12 +1,14 @@
 import { useTranslations } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
+import { parseLocale } from '@/types/enums/locale'
 
 export default async function HomePage({
   params,
 }: {
   params: Promise<{ locale: string }>
 }) {
-  const { locale } = await params
+  const { locale: rawLocale } = await params
+  const locale = parseLocale(rawLocale)
   setRequestLocale(locale)
 
   return <HomeContent />

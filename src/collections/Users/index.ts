@@ -1,4 +1,12 @@
 import type { CollectionConfig } from 'payload'
+import { UserRoles, type UserRole } from '@/types/enums/user-role'
+import { enumToPayloadOptions } from '@/types/payload-options'
+
+const USER_ROLE_LABELS: Record<UserRole, string> = {
+  [UserRoles.Admin]: 'Admin',
+  [UserRoles.Customer]: 'Client',
+  [UserRoles.Professional]: 'Professionnel',
+}
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -9,17 +17,17 @@ export const Users: CollectionConfig = {
   },
   access: {
     read: ({ req: { user } }) => {
-      if (user?.role === 'admin') return true
+      if (user?.role === UserRoles.Admin) return true
       if (user) return { id: { equals: user.id } }
       return false
     },
     create: () => true,
     update: ({ req: { user } }) => {
-      if (user?.role === 'admin') return true
+      if (user?.role === UserRoles.Admin) return true
       if (user) return { id: { equals: user.id } }
       return false
     },
-    delete: ({ req: { user } }) => user?.role === 'admin',
+    delete: ({ req: { user } }) => user?.role === UserRoles.Admin,
   },
   fields: [
     {
@@ -33,14 +41,10 @@ export const Users: CollectionConfig = {
     {
       name: 'role',
       type: 'select',
-      defaultValue: 'customer',
-      options: [
-        { label: 'Admin', value: 'admin' },
-        { label: 'Client', value: 'customer' },
-        { label: 'Professionnel', value: 'professional' },
-      ],
+      defaultValue: UserRoles.Customer,
+      options: enumToPayloadOptions(USER_ROLE_LABELS),
       access: {
-        update: ({ req }) => req.user?.role === 'admin',
+        update: ({ req }) => req.user?.role === UserRoles.Admin,
       },
       admin: { position: 'sidebar' },
     },

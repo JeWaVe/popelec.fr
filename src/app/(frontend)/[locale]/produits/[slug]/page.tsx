@@ -5,6 +5,15 @@ import { AddToCartButton } from '@/components/products/AddToCartButton'
 import { ProductGrid } from '@/components/products/ProductGrid'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
+import { parseLocale, type Locale } from '@/types/enums/locale'
+import { ProductStatuses } from '@/types/enums/product-status'
+import { TVARates, type TVARate } from '@/types/enums/tva-rate'
+import type { PriceCents } from '@/types/money'
+import { priceCents } from '@/types/money'
+import { cartProductId } from '@/types/cart'
+import { productSlug as toProductSlug } from '@/types/strings'
+import { sku as toSKU } from '@/types/strings'
+import { imageUrl as toImageUrl } from '@/types/strings'
 import type { Metadata } from 'next'
 import type { Product } from '@/payload-types'
 
@@ -13,12 +22,13 @@ type Props = {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale, slug } = await params
+  const { locale: rawLocale, slug } = await params
+  const locale: Locale = parseLocale(rawLocale)
   const payload = await getPayload()
   const result = await payload.find({
     collection: 'products',
     where: { slug: { equals: slug } },
-    locale: locale as 'fr' | 'en',
+    locale,
     limit: 1,
     depth: 1,
   })
@@ -32,14 +42,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ProductDetailPage({ params }: Props) {
-  const { locale, slug } = await params
+  const { locale: rawLocale, slug } = await params
+  const locale: Locale = parseLocale(rawLocale)
   setRequestLocale(locale)
 
   const payload = await getPayload()
   const result = await payload.find({
     collection: 'products',
-    where: { slug: { equals: slug }, status: { equals: 'published' } },
-    locale: locale as 'fr' | 'en',
+    where: { slug: { equals: slug }, status: { equals: ProductStatuses.Published } },
+    locale,
     limit: 1,
     depth: 2,
   })
@@ -49,8 +60,8 @@ export default async function ProductDetailPage({ params }: Props) {
   const t = await getTranslations({ locale, namespace: 'product' })
   const tCommon = await getTranslations({ locale, namespace: 'common' })
 
-  const priceHT = product.pricing.priceHT
-  const tvaRate = product.pricing.tvaRate || '20'
+  const priceHT = product.pricing.priceHT as PriceCents
+  const tvaRate = (product.pricing.tvaRate || TVARates.Standard) as TVARate
   const priceTTC = calculateTTC(priceHT, tvaRate)
   const stock = product.stock
   const inStock = !stock?.trackStock || (stock?.quantity ?? 0) > 0
@@ -63,8 +74,8 @@ export default async function ProductDetailPage({ params }: Props) {
     )
     const relatedResult = await payload.find({
       collection: 'products',
-      where: { id: { in: relatedIds }, status: { equals: 'published' } },
-      locale: locale as 'fr' | 'en',
+      where: { id: { in: relatedIds }, status: { equals: ProductStatuses.Published } },
+      locale,
       limit: 4,
       depth: 2,
     })
@@ -164,7 +175,7 @@ export default async function ProductDetailPage({ params }: Props) {
               <span className="text-sm text-neutral-500">{tCommon('priceHT')}</span>
               {product.pricing.compareAtPrice && product.pricing.compareAtPrice > priceHT && (
                 <span className="text-lg text-neutral-400 line-through">
-                  {formatPrice(product.pricing.compareAtPrice, locale)}
+                  {formatPrice(product.pricing.compareAtPrice as PriceCents, locale)}
                 </span>
               )}
             </div>
@@ -201,13 +212,13 @@ export default async function ProductDetailPage({ params }: Props) {
             <div className="mb-6">
               <AddToCartButton
                 product={{
-                  productId: String(product.id),
+                  productId: cartProductId(String(product.id)),
                   name: product.name,
-                  slug: product.slug,
-                  sku: product.sku,
-                  priceHT: product.pricing.priceHT,
-                  tvaRate: tvaRate,
-                  image: mainImageUrl ?? undefined,
+                  slug: toProductSlug(product.slug),
+                  sku: toSKU(product.sku),
+                  priceHT: priceCents(product.pricing.priceHT),
+                  tvaRate,
+                  ...(mainImageUrl ? { image: toImageUrl(mainImageUrl) } : {}),
                 }}
               />
             </div>

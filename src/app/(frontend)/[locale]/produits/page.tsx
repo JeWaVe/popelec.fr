@@ -1,6 +1,9 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { getPayload } from '@/lib/payload'
 import { ProductGrid } from '@/components/products/ProductGrid'
+import { parseLocale, type Locale } from '@/types/enums/locale'
+import { ProductStatuses } from '@/types/enums/product-status'
+import { ProductSortKeys, isProductSortKey, type ProductSortKey } from '@/types/enums/product-sort-key'
 import type { Metadata } from 'next'
 import type { Where } from 'payload'
 
@@ -10,40 +13,42 @@ type Props = {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale } = await params
+  const { locale: rawLocale } = await params
+  const locale = parseLocale(rawLocale)
   const t = await getTranslations({ locale, namespace: 'products' })
   return {
     title: `${t('title')} | popelec.fr`,
   }
 }
 
+const SORT_MAP: Record<ProductSortKey, string> = {
+  [ProductSortKeys.Newest]: '-createdAt',
+  [ProductSortKeys.PriceAsc]: 'pricing.priceHT',
+  [ProductSortKeys.PriceDesc]: '-pricing.priceHT',
+  [ProductSortKeys.Name]: 'name',
+}
+
 export default async function ProductsPage({ params, searchParams }: Props) {
-  const { locale } = await params
+  const { locale: rawLocale } = await params
+  const locale: Locale = parseLocale(rawLocale)
   setRequestLocale(locale)
-  const { category, sort, page: pageParam } = await searchParams
+  const { category, sort: rawSort, page: pageParam } = await searchParams
   const t = await getTranslations({ locale, namespace: 'products' })
   const payload = await getPayload()
   const currentPage = parseInt(pageParam || '1', 10)
+  const sort: ProductSortKey = isProductSortKey(rawSort) ? rawSort : ProductSortKeys.Newest
 
   // Build query
-  const where: Where = { status: { equals: 'published' } }
+  const where: Where = { status: { equals: ProductStatuses.Published } }
   if (category) {
     where['categories.slug'] = { equals: category }
-  }
-
-  // Sort mapping
-  const sortMap: Record<string, string> = {
-    newest: '-createdAt',
-    priceAsc: 'pricing.priceHT',
-    priceDesc: '-pricing.priceHT',
-    name: 'name',
   }
 
   const products = await payload.find({
     collection: 'products',
     where,
-    sort: sortMap[sort || 'newest'] || '-createdAt',
-    locale: locale as 'fr' | 'en',
+    sort: SORT_MAP[sort],
+    locale,
     page: currentPage,
     limit: 12,
     depth: 2,
@@ -53,7 +58,7 @@ export default async function ProductsPage({ params, searchParams }: Props) {
     collection: 'categories',
     where: { parent: { exists: false } },
     sort: 'sortOrder',
-    locale: locale as 'fr' | 'en',
+    locale,
     limit: 20,
   })
 
@@ -96,11 +101,11 @@ export default async function ProductsPage({ params, searchParams }: Props) {
             </p>
             <div className="flex gap-2 text-sm">
               <span className="text-neutral-400">{t('sortBy')} :</span>
-              {(['newest', 'priceAsc', 'priceDesc', 'name'] as const).map((s) => (
+              {([ProductSortKeys.Newest, ProductSortKeys.PriceAsc, ProductSortKeys.PriceDesc, ProductSortKeys.Name] as const).map((s) => (
                 <a
                   key={s}
                   href={`/${locale}/produits?${category ? `category=${category}&` : ''}sort=${s}`}
-                  className={`${sort === s || (!sort && s === 'newest') ? 'text-primary-500 font-medium' : 'text-neutral-600 hover:text-primary-500'}`}
+                  className={`${sort === s ? 'text-primary-500 font-medium' : 'text-neutral-600 hover:text-primary-500'}`}
                 >
                   {t(`sort${s.charAt(0).toUpperCase() + s.slice(1)}`)}
                 </a>
@@ -118,7 +123,7 @@ export default async function ProductsPage({ params, searchParams }: Props) {
                   {Array.from({ length: products.totalPages }, (_, i) => i + 1).map((p) => (
                     <a
                       key={p}
-                      href={`/${locale}/produits?${category ? `category=${category}&` : ''}${sort ? `sort=${sort}&` : ''}page=${p}`}
+                      href={`/${locale}/produits?${category ? `category=${category}&` : ''}${sort !== ProductSortKeys.Newest ? `sort=${sort}&` : ''}page=${p}`}
                       className={`w-10 h-10 flex items-center justify-center rounded-lg text-sm ${
                         p === currentPage
                           ? 'bg-primary-500 text-white'

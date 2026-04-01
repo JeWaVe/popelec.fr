@@ -6,15 +6,17 @@ import { formatPrice } from '@/lib/formatPrice'
 import { useLocale } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import Image from 'next/image'
+import { priceCents } from '@/types/money'
+import type { Locale } from '@/types/enums/locale'
 
 export default function CartPage() {
   const t = useTranslations('cart')
   const tCommon = useTranslations('common')
   const { items, removeItem, updateQuantity, subtotalHT, itemCount } = useCart()
-  const locale = useLocale()
+  const locale = useLocale() as Locale
 
-  const tva = Math.round(subtotalHT * 0.2) // Simplified: 20% TVA
-  const totalTTC = subtotalHT + tva
+  const tva = priceCents(Math.round(subtotalHT * 0.2)) // Simplified: 20% TVA
+  const totalTTC = priceCents(subtotalHT + tva)
 
   if (items.length === 0) {
     return (
@@ -82,7 +84,7 @@ export default function CartPage() {
                     </div>
                     <div className="text-right">
                       <p className="font-semibold text-neutral-900">
-                        {formatPrice(item.priceHT * item.quantity, locale)} {tCommon('priceHT')}
+                        {formatPrice(priceCents(item.priceHT * item.quantity), locale)} {tCommon('priceHT')}
                       </p>
                     </div>
                   </div>

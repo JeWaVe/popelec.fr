@@ -1,11 +1,12 @@
 import { ProductCard } from './ProductCard'
 import type { Product } from '@/payload-types'
+import type { Locale } from '@/types/enums/locale'
 
 type ProductForGrid = Pick<Product, 'id' | 'slug' | 'name' | 'shortDescription' | 'pricing' | 'stock' | 'images'>
 
 interface ProductGridProps {
   products: ProductForGrid[]
-  locale: string
+  locale: Locale
 }
 
 export function ProductGrid({ products, locale }: ProductGridProps) {
