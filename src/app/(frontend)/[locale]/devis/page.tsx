@@ -6,6 +6,7 @@ import { Link } from '@/i18n/navigation'
 
 export default function QuotePage() {
   const t = useTranslations('quote')
+  const tCommon = useTranslations('common')
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -97,7 +98,7 @@ export default function QuotePage() {
         <h1 className="text-2xl font-bold mb-2">{t('success')}</h1>
         <p className="text-neutral-500 mb-8">{t('successDesc')}</p>
         <Link href="/produits" className="bg-primary-500 hover:bg-primary-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors inline-block">
-          {useTranslations('common')('viewProducts')}
+          {tCommon('viewProducts')}
         </Link>
       </div>
     )
