@@ -199,6 +199,20 @@
     "noResultsFor": "Aucun résultat pour « {query} »",
     "placeholder": "Rechercher un produit..."
   },
+  "share": {
+    "title": "Dossier partagé",
+    "loading": "Vérification de vos droits d'accès...",
+    "redirecting": "Redirection vers l'espace fichiers...",
+    "accessDenied": "Accès refusé",
+    "accessDeniedDesc": "Vous n'avez pas accès à ce dossier partagé.",
+    "notFound": "Dossier introuvable",
+    "notFoundDesc": "Ce dossier partagé n'existe pas ou n'est plus disponible.",
+    "error": "Erreur",
+    "errorDesc": "Impossible d'accéder au dossier partagé. Veuillez réessayer.",
+    "retry": "Réessayer",
+    "loginRequired": "Veuillez vous connecter pour accéder à ce dossier.",
+    "openInSeafile": "Ouvrir dans Seafile"
+  },
   "comingSoon": {
     "title": "Bientôt disponible",
     "message": "Notre site est en cours de préparation. Revenez bientôt pour découvrir notre catalogue de matériel électrique industriel.",

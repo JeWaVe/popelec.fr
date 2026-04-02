@@ -13,6 +13,7 @@ import { QuoteRequests } from '@/collections/QuoteRequests'
 import { Users } from '@/collections/Users'
 import { Media } from '@/collections/Media'
 import { Pages } from '@/collections/Pages'
+import { SharedFolders } from '@/collections/SharedFolders'
 import { SiteSettings } from '@/globals/SiteSettings'
 import { Navigation } from '@/globals/Navigation'
 
@@ -40,6 +41,7 @@ export default buildConfig({
     Users,
     Media,
     Pages,
+    SharedFolders,
   ],
   globals: [SiteSettings, Navigation],
   editor: lexicalEditor(),

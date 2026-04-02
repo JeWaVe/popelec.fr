@@ -11,6 +11,10 @@ services:
       - NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
       - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
       - MAINTENANCE_MODE=true
+      - SEAFILE_URL=http://seafile:80
+      - NEXT_PUBLIC_SEAFILE_URL=https://files.popelec.fr
+      - SEAFILE_ADMIN_TOKEN=${SEAFILE_ADMIN_TOKEN}
+      - SEAFILE_ENCRYPTION_KEY=${SEAFILE_ENCRYPTION_KEY}
     volumes:
       - media_data:/app/media
     depends_on:
@@ -44,6 +48,7 @@ services:
       - certbot_www:/var/www/certbot:ro
     depends_on:
       - app
+      - seafile
 
   certbot:
     image: certbot/certbot
@@ -52,8 +57,47 @@ services:
       - certbot_www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
+  seafile-db:
+    image: mariadb:10.11
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${SEAFILE_MYSQL_ROOT_PASSWORD}
+      MYSQL_LOG_CONSOLE: "true"
+    volumes:
+      - seafile_db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "healthcheck.sh --connect --innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  memcached:
+    image: memcached:1.6-alpine
+    restart: always
+    entrypoint: ["memcached", "-m", "256"]
+
+  seafile:
+    image: seafileltd/seafile-mc:11.0-latest
+    restart: always
+    volumes:
+      - seafile_data:/shared
+    environment:
+      DB_HOST: seafile-db
+      DB_ROOT_PASSWD: ${SEAFILE_MYSQL_ROOT_PASSWORD}
+      SEAFILE_ADMIN_EMAIL: ${SEAFILE_ADMIN_EMAIL}
+      SEAFILE_ADMIN_PASSWORD: ${SEAFILE_ADMIN_PASSWORD}
+      SEAFILE_SERVER_LETSENCRYPT: "false"
+      SEAFILE_SERVER_HOSTNAME: files.popelec.fr
+    depends_on:
+      seafile-db:
+        condition: service_healthy
+      memcached:
+        condition: service_started
+
 volumes:
   pg_data:
   media_data:
   certbot_data:
   certbot_www:
+  seafile_db_data:
+  seafile_data:

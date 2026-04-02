@@ -39,6 +39,11 @@ services:
       STRIPE_WEBHOOK_SECRET: ""
       NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ""
       NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      SEAFILE_URL: http://seafile:80
+      NEXT_PUBLIC_SEAFILE_URL: http://localhost:8080
+      SEAFILE_ADMIN_EMAIL: ${SEAFILE_ADMIN_EMAIL:-admin@popelec.fr}
+      SEAFILE_ADMIN_TOKEN: ${SEAFILE_ADMIN_TOKEN:-}
+      SEAFILE_ENCRYPTION_KEY: ${SEAFILE_ENCRYPTION_KEY:-dev_seafile_encryption_key_32chars}
     depends_on:
       postgres:
         condition: service_healthy
@@ -49,7 +54,45 @@ services:
       - "8025:8025"
       - "1025:1025"
 
+  seafile-db:
+    image: mariadb:10.11
+    environment:
+      MYSQL_ROOT_PASSWORD: ${SEAFILE_MYSQL_ROOT_PASSWORD:-seafile_dev}
+      MYSQL_LOG_CONSOLE: "true"
+    volumes:
+      - seafile_db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "healthcheck.sh --connect --innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  memcached:
+    image: memcached:1.6-alpine
+    entrypoint: ["memcached", "-m", "256"]
+
+  seafile:
+    image: seafileltd/seafile-mc:11.0-latest
+    ports:
+      - "8080:80"
+    volumes:
+      - seafile_data:/shared
+    environment:
+      DB_HOST: seafile-db
+      DB_ROOT_PASSWD: ${SEAFILE_MYSQL_ROOT_PASSWORD:-seafile_dev}
+      SEAFILE_ADMIN_EMAIL: ${SEAFILE_ADMIN_EMAIL:-admin@popelec.fr}
+      SEAFILE_ADMIN_PASSWORD: ${SEAFILE_ADMIN_PASSWORD:-admin_dev_password}
+      SEAFILE_SERVER_LETSENCRYPT: "false"
+      SEAFILE_SERVER_HOSTNAME: seafile.local
+    depends_on:
+      seafile-db:
+        condition: service_healthy
+      memcached:
+        condition: service_started
+
 volumes:
   pg_data:
   node_modules:
   next_cache:
+  seafile_db_data:
+  seafile_data:

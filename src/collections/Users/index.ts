@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { UserRoles, type UserRole } from '@/types/enums/user-role'
 import { enumToPayloadOptions } from '@/types/payload-options'
 import { validatePhone, validateSiret, validateVATNumber, validatePostalCodeFR } from '@/lib/validation'
+import { afterChangeSeafileSync, afterDeleteSeafileSync } from './hooks/syncSeafileUser'
 
 const USER_ROLE_LABELS: Record<UserRole, string> = {
   [UserRoles.Admin]: 'Admin',
@@ -12,6 +13,10 @@ const USER_ROLE_LABELS: Record<UserRole, string> = {
 export const Users: CollectionConfig = {
   slug: 'users',
   auth: true,
+  hooks: {
+    afterChange: [afterChangeSeafileSync],
+    afterDelete: [afterDeleteSeafileSync],
+  },
   admin: {
     useAsTitle: 'email',
     group: 'Administration',
@@ -90,6 +95,28 @@ export const Users: CollectionConfig = {
       name: 'stripeCustomerId',
       type: 'text',
       admin: { position: 'sidebar', readOnly: true },
+    },
+    {
+      name: 'seafileEmail',
+      type: 'text',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description: 'Compte Seafile associé',
+      },
+      access: {
+        read: ({ req }) => req.user?.role === UserRoles.Admin,
+        update: () => false,
+      },
+    },
+    {
+      name: 'seafilePasswordEncrypted',
+      type: 'text',
+      hidden: true,
+      access: {
+        read: () => false,
+        update: () => false,
+      },
     },
   ],
 }

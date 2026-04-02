@@ -31,5 +31,6 @@ export const routing = defineRouting({
       fr: '/politique-confidentialite',
       en: '/privacy-policy',
     },
+    '/partage/[slug]': { fr: '/partage/[slug]', en: '/share/[slug]' },
   },
 })

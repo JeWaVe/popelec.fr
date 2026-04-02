@@ -36,5 +36,13 @@ export { cartItemsFromJSON } from './converters'
 // --- Payload helpers ---
 export { enumToPayloadOptions } from './payload-options'
 
+// --- Seafile types ---
+export type {
+  SeafileLibraryId, SeafileAuthToken, SharedFolderSlug, SeafileEncryptedPassword,
+} from './seafile'
+export {
+  seafileLibraryId, seafileAuthToken, sharedFolderSlug, seafileEncryptedPassword,
+} from './seafile'
+
 // --- Type guards ---
 export { isLocale, parseLocale, isProductSortKey } from './guards'

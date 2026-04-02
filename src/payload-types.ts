@@ -74,6 +74,7 @@ export interface Config {
     users: User;
     media: Media;
     pages: Page;
+    'shared-folders': SharedFolder;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -88,6 +89,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
+    'shared-folders': SharedFoldersSelect<false> | SharedFoldersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -398,6 +400,11 @@ export interface User {
       }[]
     | null;
   stripeCustomerId?: string | null;
+  /**
+   * Compte Seafile associé
+   */
+  seafileEmail?: string | null;
+  seafilePasswordEncrypted?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -479,6 +486,41 @@ export interface Page {
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * Dossiers partagés liés aux bibliothèques Seafile
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "shared-folders".
+ */
+export interface SharedFolder {
+  id: number;
+  /**
+   * Nom affiché du dossier partagé
+   */
+  name: string;
+  /**
+   * Identifiant URL (ex: 'nuomake' → /partage/nuomake)
+   */
+  slug: string;
+  /**
+   * UUID de la bibliothèque Seafile
+   */
+  seafileLibraryId: string;
+  /**
+   * Utilisateurs autorisés à accéder à ce dossier
+   */
+  allowedUsers?: (number | User)[] | null;
+  /**
+   * Description interne (non affichée)
+   */
+  description?: string | null;
+  /**
+   * Désactiver pour bloquer temporairement l'accès
+   */
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -529,6 +571,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'pages';
         value: number | Page;
+      } | null)
+    | ({
+        relationTo: 'shared-folders';
+        value: number | SharedFolder;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -769,6 +815,8 @@ export interface UsersSelect<T extends boolean = true> {
         id?: T;
       };
   stripeCustomerId?: T;
+  seafileEmail?: T;
+  seafilePasswordEncrypted?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -856,6 +904,20 @@ export interface PagesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "shared-folders_select".
+ */
+export interface SharedFoldersSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  seafileLibraryId?: T;
+  allowedUsers?: T;
+  description?: T;
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

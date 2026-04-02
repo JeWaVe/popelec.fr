@@ -199,6 +199,20 @@
     "noResultsFor": "No results for \"{query}\"",
     "placeholder": "Search for a product..."
   },
+  "share": {
+    "title": "Shared folder",
+    "loading": "Checking your access rights...",
+    "redirecting": "Redirecting to file space...",
+    "accessDenied": "Access denied",
+    "accessDeniedDesc": "You do not have access to this shared folder.",
+    "notFound": "Folder not found",
+    "notFoundDesc": "This shared folder does not exist or is no longer available.",
+    "error": "Error",
+    "errorDesc": "Unable to access the shared folder. Please try again.",
+    "retry": "Try again",
+    "loginRequired": "Please log in to access this folder.",
+    "openInSeafile": "Open in Seafile"
+  },
   "comingSoon": {
     "title": "Coming Soon",
     "message": "Our site is under preparation. Come back soon to discover our industrial electrical equipment catalog.",
