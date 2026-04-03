@@ -19,7 +19,7 @@ export function Header() {
   const router = useRouter()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
-  const { user, loading: authLoading, logout } = useAuth()
+  const { user, logout } = useAuth()
 
   function handleSearch(e: FormEvent) {
     e.preventDefault()
@@ -103,7 +103,7 @@ export function Header() {
 
           {/* Right side */}
           <div className="flex items-center gap-4">
-            {!authLoading && user ? (
+            {user ? (
               <>
                 <Link href="/compte" aria-label={t('account')} className="hidden md:flex text-neutral-600 hover:text-primary-500 transition-colors">
                   <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -121,11 +121,11 @@ export function Header() {
                   </svg>
                 </button>
               </>
-            ) : !authLoading ? (
+            ) : (
               <Link href="/compte/connexion" className="hidden md:flex text-neutral-700 hover:text-primary-500 font-medium transition-colors">
                 {t('login')}
               </Link>
-            ) : null}
+            )}
             <Link href="/panier" aria-label={t('cart')} className="relative text-neutral-600 hover:text-primary-500 transition-colors">
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" />
@@ -180,7 +180,7 @@ export function Header() {
               <Link href="/devis" className="text-neutral-700 hover:text-primary-500 font-medium" onClick={() => setMobileOpen(false)}>
                 {t('quote')}
               </Link>
-              {!authLoading && user ? (
+              {user ? (
                 <>
                   <Link href="/compte" className="text-neutral-700 hover:text-primary-500 font-medium" onClick={() => setMobileOpen(false)}>
                     {t('account')}
@@ -192,11 +192,11 @@ export function Header() {
                     {t('logout')}
                   </button>
                 </>
-              ) : !authLoading ? (
+              ) : (
                 <Link href="/compte/connexion" className="text-neutral-700 hover:text-primary-500 font-medium" onClick={() => setMobileOpen(false)}>
                   {t('login')}
                 </Link>
-              ) : null}
+              )}
             </div>
           </div>
         )}
