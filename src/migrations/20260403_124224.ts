@@ -3,9 +3,9 @@ import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
    CREATE TYPE "public"."_locales" AS ENUM('fr', 'en');
-  CREATE TYPE "public"."enum_products_status" AS ENUM('draft', 'published');
+  CREATE TYPE "public"."enum_products_status" AS ENUM('draft', 'published', 'outOfStock', 'archived');
   CREATE TYPE "public"."enum_products_pricing_tva_rate" AS ENUM('10', '20', '5.5');
-  CREATE TYPE "public"."enum__products_v_version_status" AS ENUM('draft', 'published');
+  CREATE TYPE "public"."enum__products_v_version_status" AS ENUM('draft', 'published', 'outOfStock', 'archived');
   CREATE TYPE "public"."enum__products_v_version_pricing_tva_rate" AS ENUM('10', '20', '5.5');
   CREATE TYPE "public"."enum__products_v_published_locale" AS ENUM('fr', 'en');
   CREATE TYPE "public"."enum_orders_status" AS ENUM('pending', 'paid', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded');

@@ -6244,7 +6244,9 @@
       "schema": "public",
       "values": [
         "draft",
-        "published"
+        "published",
+        "outOfStock",
+        "archived"
       ]
     },
     "public.enum_products_pricing_tva_rate": {
@@ -6261,7 +6263,9 @@
       "schema": "public",
       "values": [
         "draft",
-        "published"
+        "published",
+        "outOfStock",
+        "archived"
       ]
     },
     "public.enum__products_v_version_pricing_tva_rate": {
@@ -6349,6 +6353,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "64fe2864-93ac-4f2b-a1c6-ade7394e6d6e",
+  "id": "bdde1d7e-45f2-4e78-bd02-09151f480730",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }
