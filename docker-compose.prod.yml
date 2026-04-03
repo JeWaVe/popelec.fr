@@ -81,6 +81,7 @@ services:
     restart: always
     volumes:
       - seafile_data:/shared
+      - ./seafile/setup-https.sh:/etc/my_init.d/99-setup-https.sh:ro
     environment:
       DB_HOST: seafile-db
       DB_ROOT_PASSWD: ${SEAFILE_MYSQL_ROOT_PASSWORD}
