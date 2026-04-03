@@ -8,6 +8,7 @@ const MAINTENANCE_BYPASS_PATTERNS = [
   /^\/(admin|api|_next|_vercel|media)/,
   /\.(ico|png|jpg|jpeg|svg|webp|gif|css|js|woff2?|ttf|eot)$/,
   /\/(fr|en)\/coming-soon$/,
+  /\/(fr|en)\/(compte\/(connexion|inscription|mot-de-passe-oublie)|account\/(login|register|forgot-password))$/,
 ]
 
 export default function middleware(request: NextRequest) {
