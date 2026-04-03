@@ -1,4 +1,17 @@
 services:
+  migrate:
+    build:
+      context: .
+      target: migrate
+    environment:
+      - DATABASE_URI=postgresql://payload:${POSTGRES_PASSWORD}@postgres:5432/popelec
+      - PAYLOAD_SECRET=${PAYLOAD_SECRET}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles:
+      - migrate
+
   app:
     build: .
     restart: always
