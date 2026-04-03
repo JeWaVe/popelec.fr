@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { parseLocale } from '@/types/enums/locale'
+import { SignOutButton } from '@/components/account/SignOutButton'
 
 type Props = {
   params: Promise<{ locale: string }>
@@ -39,6 +40,8 @@ export default async function AccountPage({ params }: Props) {
           <p className="text-sm text-neutral-500">{t('noQuotes')}</p>
         </Link>
       </div>
+
+      <SignOutButton />
     </div>
   )
 }

@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl'
 import { Link, useRouter } from '@/i18n/navigation'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import { useState, type FormEvent } from 'react'
+import { useAuth } from '@/hooks/useAuth'
 
 const CATEGORIES = [
   { slug: 'moteurs', key: 'motors' as const },
@@ -18,6 +19,7 @@ export function Header() {
   const router = useRouter()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const { user, loading: authLoading, logout } = useAuth()
 
   function handleSearch(e: FormEvent) {
     e.preventDefault()
@@ -101,11 +103,23 @@ export function Header() {
 
           {/* Right side */}
           <div className="flex items-center gap-4">
-            <Link href="/compte" aria-label={t('account')} className="hidden md:flex text-neutral-600 hover:text-primary-500 transition-colors">
+            <Link href={user ? '/compte' : '/compte/connexion'} aria-label={t('account')} className="hidden md:flex text-neutral-600 hover:text-primary-500 transition-colors">
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
             </Link>
+            {!authLoading && user && (
+              <button
+                onClick={logout}
+                aria-label={t('logout')}
+                className="hidden md:flex text-neutral-600 hover:text-primary-500 transition-colors"
+                title={t('logout')}
+              >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+              </button>
+            )}
             <Link href="/panier" aria-label={t('cart')} className="relative text-neutral-600 hover:text-primary-500 transition-colors">
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" />
@@ -160,9 +174,17 @@ export function Header() {
               <Link href="/devis" className="text-neutral-700 hover:text-primary-500 font-medium" onClick={() => setMobileOpen(false)}>
                 {t('quote')}
               </Link>
-              <Link href="/compte" className="text-neutral-700 hover:text-primary-500 font-medium" onClick={() => setMobileOpen(false)}>
+              <Link href={user ? '/compte' : '/compte/connexion'} className="text-neutral-700 hover:text-primary-500 font-medium" onClick={() => setMobileOpen(false)}>
                 {t('account')}
               </Link>
+              {!authLoading && user && (
+                <button
+                  onClick={() => { setMobileOpen(false); logout() }}
+                  className="text-neutral-700 hover:text-primary-500 font-medium text-left transition-colors"
+                >
+                  {t('logout')}
+                </button>
+              )}
             </div>
           </div>
         )}
