@@ -133,8 +133,8 @@ SECONDS=0
 HEALTHY=false
 
 while (( SECONDS < HEALTH_TIMEOUT )); do
-  # Probe inside the app container to avoid nginx/firewall issues
-  if $COMPOSE exec -T app wget -q -O /dev/null --timeout=5 "$HEALTH_URL" 2>/dev/null; then
+  # Probe inside the app container using node (wget not available in alpine prod image)
+  if $COMPOSE exec -T app node -e "require('http').get('$HEALTH_URL',r=>{process.exit(r.statusCode<400?0:1)}).on('error',()=>process.exit(1))" 2>/dev/null; then
     HEALTHY=true
     break
   fi
