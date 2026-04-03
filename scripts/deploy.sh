@@ -97,9 +97,14 @@ info "Now at commit $NEW_COMMIT"
 # ---------------------------------------------------------------------------
 info "Tagging current app image for rollback..."
 
-CURRENT_IMAGE=$($COMPOSE images app --format '{{.Repository}}:{{.Tag}}' 2>/dev/null | head -1)
-if [[ -n "$CURRENT_IMAGE" && "$CURRENT_IMAGE" != *"<none>"* ]]; then
-  docker tag "$CURRENT_IMAGE" "$ROLLBACK_IMAGE_TAG" 2>/dev/null || true
+# docker compose images can hang when piped if no image exists; use docker inspect instead
+APP_CONTAINER=$($COMPOSE ps -q app 2>/dev/null || true)
+if [[ -n "$APP_CONTAINER" ]]; then
+  CURRENT_IMAGE=$(docker inspect --format '{{.Image}}' "$APP_CONTAINER" 2>/dev/null || true)
+  if [[ -n "$CURRENT_IMAGE" ]]; then
+    docker tag "$CURRENT_IMAGE" "$ROLLBACK_IMAGE_TAG" 2>/dev/null || true
+    info "  saved rollback image"
+  fi
 fi
 
 info "Building new images (app + migrate)..."
@@ -146,10 +151,10 @@ else
   info "Rolling back to previous image..."
 
   if docker image inspect "$ROLLBACK_IMAGE_TAG" >/dev/null 2>&1; then
-    # Re-tag the old image back and recreate
-    REPO=$($COMPOSE images app --format '{{.Repository}}' 2>/dev/null | head -1)
-    if [[ -n "$REPO" ]]; then
-      docker tag "$ROLLBACK_IMAGE_TAG" "${REPO}:latest" 2>/dev/null || true
+    # Get the image name compose expects and re-tag the old image
+    COMPOSE_IMAGE=$($COMPOSE config --images 2>/dev/null | grep app || true)
+    if [[ -n "$COMPOSE_IMAGE" ]]; then
+      docker tag "$ROLLBACK_IMAGE_TAG" "$COMPOSE_IMAGE" 2>/dev/null || true
     fi
     $COMPOSE up -d --no-deps --force-recreate app
     error "Rolled back to previous image. Check logs: docker compose -f $COMPOSE_FILE logs app"
