@@ -6,6 +6,7 @@ export default tseslint.config(
     // Global ignores
     ignores: [
       'src/payload-types.ts',
+      'src/migrations/**',
       '.next/**',
       'node_modules/**',
       'dist/**',
