@@ -16,11 +16,7 @@ export function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center">
-                <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
+              <img src="/images/logo.svg" alt="popelec.fr" className="w-8 h-8" width={32} height={32} />
               <span className="text-lg font-bold text-white">popelec.fr</span>
             </div>
             <p className="text-sm">{t('description')}</p>

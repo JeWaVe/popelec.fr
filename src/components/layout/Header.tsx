@@ -49,11 +49,7 @@ export function Header() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-primary-500 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </div>
+            <img src="/images/logo.svg" alt="popelec.fr" className="w-10 h-10" width={40} height={40} />
             <div>
               <span className="text-xl font-bold text-primary-500">popelec</span>
               <span className="text-xl text-neutral-400">.fr</span>
