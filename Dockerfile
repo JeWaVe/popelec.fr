@@ -15,13 +15,11 @@ ENV PAYLOAD_SECRET=build-secret-placeholder
 ENV DATABASE_URI=postgres://placeholder:placeholder@localhost:5432/placeholder
 RUN npm run build
 
-## Stage 3: Migrate — full source + Payload CLI for running migrations
+## Stage 3: Migrate — source + Payload CLI for running migrations
 FROM node:22-alpine AS migrate
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=builder /app/.next ./.next
 COPY . .
-ENV NEXT_TELEMETRY_DISABLED=1
 CMD ["npx", "payload", "migrate"]
 
 ## Stage 4: Production
