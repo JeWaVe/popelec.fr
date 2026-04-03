@@ -14,20 +14,25 @@ const MAINTENANCE_BYPASS_PATTERNS = [
 export default function middleware(request: NextRequest) {
   const isMaintenanceMode = process.env.MAINTENANCE_MODE === 'true'
 
+  const { pathname } = request.nextUrl
+  const hasToken = request.cookies.has('payload-token')
+
   if (isMaintenanceMode) {
-    const { pathname } = request.nextUrl
     const shouldBypass = MAINTENANCE_BYPASS_PATTERNS.some((pattern) => pattern.test(pathname))
 
-    if (!shouldBypass) {
-      const hasToken = request.cookies.has('payload-token')
-
-      if (!hasToken) {
-        const locale = pathname.startsWith('/en') ? 'en' : 'fr'
-        const url = request.nextUrl.clone()
-        url.pathname = `/${locale}/coming-soon`
-        return NextResponse.redirect(url)
-      }
+    if (!shouldBypass && !hasToken) {
+      const locale = pathname.startsWith('/en') ? 'en' : 'fr'
+      const url = request.nextUrl.clone()
+      url.pathname = `/${locale}/coming-soon`
+      return NextResponse.redirect(url)
     }
+  }
+
+  if (hasToken && /\/(fr|en)\/coming-soon$/.test(pathname)) {
+    const locale = pathname.startsWith('/en') ? 'en' : 'fr'
+    const url = request.nextUrl.clone()
+    url.pathname = `/${locale}`
+    return NextResponse.redirect(url)
   }
 
   return intlMiddleware(request)
