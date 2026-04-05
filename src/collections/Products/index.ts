@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { isAdmin } from '@/access/isAdmin'
 import { ProductStatuses, type ProductStatus } from '@/types/enums/product-status'
 import { TVARates, type TVARate } from '@/types/enums/tva-rate'
 import { enumToPayloadOptions } from '@/types/payload-options'
@@ -25,6 +26,9 @@ export const Products: CollectionConfig = {
   },
   access: {
     read: () => true,
+    create: isAdmin,
+    update: isAdmin,
+    delete: isAdmin,
   },
   versions: { drafts: true },
   fields: [

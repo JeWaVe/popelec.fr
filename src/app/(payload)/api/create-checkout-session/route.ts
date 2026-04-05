@@ -11,7 +11,15 @@ export async function POST(req: NextRequest) {
     if (blocked) return blocked
 
     if (!process.env.STRIPE_SECRET_KEY) {
-      return NextResponse.json({ error: 'Stripe non configuré' }, { status: 500 })
+      return NextResponse.json({ error: 'Service indisponible' }, { status: 500 })
+    }
+
+    const payload = await getPayload()
+
+    // Authenticate user — required for checkout
+    const { user } = await payload.auth({ headers: req.headers })
+    if (!user) {
+      return NextResponse.json({ error: 'Authentification requise' }, { status: 401 })
     }
 
     const body = await req.json()
@@ -25,7 +33,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Panier vide' }, { status: 400 })
     }
 
-    const payload = await getPayload()
+    // Validate quantities — must be positive integers, capped at 999
+    for (const item of items) {
+      if (!Number.isInteger(item.quantity) || item.quantity < 1 || item.quantity > 999) {
+        return NextResponse.json(
+          { error: 'Quantité invalide' },
+          { status: 400 },
+        )
+      }
+    }
+
     const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
 
     // Fetch products and validate
@@ -89,15 +106,14 @@ export async function POST(req: NextRequest) {
       locale: locale === Locales.Fr ? 'fr' : 'en',
       metadata: {
         source: 'popelec',
+        userId: String(user.id),
       },
+      customer_email: user.email as string,
     })
 
     return NextResponse.json({ url: session.url })
   } catch (err) {
     console.error('Checkout error:', err)
-    return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

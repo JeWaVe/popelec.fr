@@ -1,13 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { randomBytes } from 'node:crypto'
 import { getPayload } from '@/lib/payload'
 import { stripe } from '@/lib/stripe'
 import { OrderStatuses } from '@/types/enums/order-status'
-import { TVARates } from '@/types/enums/tva-rate'
+import { TVARates, type TVARate } from '@/types/enums/tva-rate'
 
 export async function POST(req: NextRequest) {
   try {
     if (!process.env.STRIPE_WEBHOOK_SECRET) {
-      return NextResponse.json({ error: 'Webhook secret non configuré' }, { status: 500 })
+      console.error('STRIPE_WEBHOOK_SECRET is not configured')
+      return NextResponse.json({ error: 'Service unavailable' }, { status: 500 })
     }
 
     const body = await req.text()
@@ -29,6 +31,12 @@ export async function POST(req: NextRequest) {
       case 'checkout.session.completed': {
         const session = event.data.object
 
+        // Only create order if payment was actually collected
+        if (session.payment_status !== 'paid') {
+          console.warn('Checkout session completed but payment_status is', session.payment_status)
+          break
+        }
+
         // Check for duplicate order (idempotency)
         const existing = await payload.find({
           collection: 'orders',
@@ -41,30 +49,59 @@ export async function POST(req: NextRequest) {
           break
         }
 
-        // Generate order number
-        const orderCount = await payload.count({ collection: 'orders' })
-        const orderNumber = `POP-${String(orderCount.totalDocs + 1).padStart(6, '0')}`
+        // Generate collision-safe order number: POP-YYYYMMDD-XXXXXX
+        const now = new Date()
+        const datePart = now.toISOString().slice(0, 10).replace(/-/g, '')
+        const randomPart = randomBytes(3).toString('hex').toUpperCase()
+        const orderNumber = `POP-${datePart}-${randomPart}`
 
         // Retrieve line items from Stripe with price data expanded
         const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
           expand: ['data.price'],
         })
 
-        // Create order
-        const customerId = parseInt(session.metadata?.userId || '0', 10)
+        // Create order — userId is required (set during checkout)
+        const rawUserId = session.metadata?.userId
+        if (!rawUserId) {
+          console.error('Missing userId in checkout session metadata:', session.id)
+          break
+        }
+        const customerId = parseInt(rawUserId, 10)
         const orderItems = await Promise.all(lineItems.data.map(async (item) => {
           // Retrieve product metadata from the Stripe Price's product
           let payloadId = 0
+          let sku = ''
+          let tvaRate: TVARate = TVARates.Standard
           if (item.price?.product && typeof item.price.product === 'string') {
             const stripeProduct = await stripe.products.retrieve(item.price.product)
             payloadId = parseInt(stripeProduct.metadata?.payloadId || '0', 10)
+            sku = stripeProduct.metadata?.sku || ''
+
+            // Look up the Payload product to get the correct TVA rate
+            if (payloadId) {
+              try {
+                const payloadProduct = await payload.findByID({
+                  collection: 'products',
+                  id: payloadId,
+                })
+                tvaRate = (payloadProduct.pricing?.tvaRate as TVARate) || TVARates.Standard
+                sku = sku || String(payloadProduct.sku || '')
+              } catch {
+                // Product may have been deleted — use Stripe metadata
+              }
+            }
           }
+
+          // Use unit price (amount_total / quantity), not the line total
+          const quantity = item.quantity || 1
+          const unitPriceHT = item.price?.unit_amount || Math.round((item.amount_total || 0) / quantity)
+
           return {
             productName: item.description || '',
-            sku: '',
-            quantity: item.quantity || 1,
-            priceHT: item.amount_total || 0,
-            tvaRate: TVARates.Standard,
+            sku,
+            quantity,
+            priceHT: unitPriceHT,
+            tvaRate,
             product: payloadId,
           }
         }))
@@ -122,9 +159,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ received: true })
   } catch (err) {
     console.error('Webhook error:', err)
-    return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Webhook error' },
-      { status: 400 }
-    )
+    return NextResponse.json({ error: 'Webhook processing failed' }, { status: 400 })
   }
 }

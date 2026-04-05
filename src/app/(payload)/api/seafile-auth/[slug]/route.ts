@@ -62,9 +62,6 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
     })
   } catch (err) {
     console.error('Seafile auth error:', err)
-    return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Erreur serveur' },
-      { status: 500 },
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

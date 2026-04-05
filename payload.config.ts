@@ -45,7 +45,14 @@ export default buildConfig({
   ],
   globals: [SiteSettings, Navigation],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET || '',
+  secret: (() => {
+    const secret = process.env.PAYLOAD_SECRET
+    if (!secret) throw new Error('PAYLOAD_SECRET env var is required')
+    if (secret === 'dev-secret-do-not-use-in-production' && process.env.NODE_ENV === 'production') {
+      throw new Error('PAYLOAD_SECRET must not use the dev default in production')
+    }
+    return secret
+  })(),
   typescript: {
     outputFile: path.resolve(dirname, 'src/payload-types.ts'),
   },

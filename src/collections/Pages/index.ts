@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { isAdmin } from '@/access/isAdmin'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -8,6 +9,9 @@ export const Pages: CollectionConfig = {
   },
   access: {
     read: () => true,
+    create: isAdmin,
+    update: isAdmin,
+    delete: isAdmin,
   },
   versions: { drafts: true },
   fields: [

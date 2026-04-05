@@ -15,12 +15,14 @@ export default function middleware(request: NextRequest) {
   const isMaintenanceMode = process.env.MAINTENANCE_MODE === 'true'
 
   const { pathname } = request.nextUrl
-  const hasToken = request.cookies.has('payload-token')
+  // Validate token has JWT-like format (3 base64url segments separated by dots)
+  const tokenValue = request.cookies.get('payload-token')?.value
+  const hasValidToken = Boolean(tokenValue && /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(tokenValue))
 
   if (isMaintenanceMode) {
     const shouldBypass = MAINTENANCE_BYPASS_PATTERNS.some((pattern) => pattern.test(pathname))
 
-    if (!shouldBypass && !hasToken) {
+    if (!shouldBypass && !hasValidToken) {
       const locale = pathname.startsWith('/en') ? 'en' : 'fr'
       const url = request.nextUrl.clone()
       url.pathname = `/${locale}/coming-soon`
@@ -28,7 +30,7 @@ export default function middleware(request: NextRequest) {
     }
   }
 
-  if (hasToken && /\/(fr|en)\/coming-soon$/.test(pathname)) {
+  if (hasValidToken && /\/(fr|en)\/coming-soon$/.test(pathname)) {
     const locale = pathname.startsWith('/en') ? 'en' : 'fr'
     const url = request.nextUrl.clone()
     url.pathname = `/${locale}`

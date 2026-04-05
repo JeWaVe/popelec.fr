@@ -50,6 +50,7 @@ export const Users: CollectionConfig = {
       defaultValue: UserRoles.Customer,
       options: enumToPayloadOptions(USER_ROLE_LABELS),
       access: {
+        create: ({ req }) => req.user?.role === UserRoles.Admin,
         update: ({ req }) => req.user?.role === UserRoles.Admin,
       },
       admin: { position: 'sidebar' },

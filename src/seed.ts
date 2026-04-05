@@ -189,17 +189,21 @@ async function seed() {
   // Create admin user if none exists
   const existingUsers = await payload.find({ collection: 'users', limit: 1 })
   if (existingUsers.totalDocs === 0) {
+    const seedPassword = process.env.ADMIN_SEED_PASSWORD
+    if (!seedPassword) {
+      throw new Error('ADMIN_SEED_PASSWORD env var is required for seeding')
+    }
     await payload.create({
       collection: 'users',
       data: {
-        email: 'admin@popelec.fr',
-        password: 'REDACTED_PASSWORD',
+        email: process.env.ADMIN_SEED_EMAIL || 'admin@popelec.fr',
+        password: seedPassword,
         firstName: 'Admin',
         lastName: 'Popelec',
         role: UserRoles.Admin,
       },
     })
-    console.log('Created admin user: admin@popelec.fr / REDACTED_PASSWORD')
+    console.log('Created admin user')
   }
 
   // Create categories
