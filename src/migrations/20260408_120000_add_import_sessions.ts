@@ -17,16 +17,9 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
       "file_tree_json" varchar,
       "llm_raw_response" varchar,
       "error_message" varchar,
+      "created_by_id" integer,
       "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
       "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
-    );
-
-    CREATE TABLE "import_sessions_rels" (
-      "id" serial PRIMARY KEY NOT NULL,
-      "order" integer,
-      "parent_id" integer NOT NULL,
-      "path" varchar NOT NULL,
-      "users_id" integer
     );
 
     CREATE TABLE "product_candidates_proposed_image_paths" (
@@ -49,6 +42,7 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
 
     CREATE TABLE "product_candidates" (
       "id" serial PRIMARY KEY NOT NULL,
+      "session_id" integer NOT NULL,
       "index" numeric NOT NULL,
       "status" "enum_product_candidates_status" DEFAULT 'pending',
       "proposed_sku" varchar NOT NULL,
@@ -61,53 +55,37 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
       "proposed_source_currency" "enum_product_candidates_proposed_source_currency" DEFAULT 'USD',
       "proposed_source_amount" numeric,
       "proposed_specs_json" varchar,
+      "confirmed_product_id" integer,
       "error_message" varchar,
       "reviewed_at" timestamp(3) with time zone,
+      "reviewed_by_id" integer,
       "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
       "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
     );
 
-    CREATE TABLE "product_candidates_rels" (
-      "id" serial PRIMARY KEY NOT NULL,
-      "order" integer,
-      "parent_id" integer NOT NULL,
-      "path" varchar NOT NULL,
-      "import_sessions_id" integer,
-      "products_id" integer,
-      "users_id" integer
-    );
-
-    ALTER TABLE "import_sessions_rels" ADD CONSTRAINT "import_sessions_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."import_sessions"("id") ON DELETE cascade ON UPDATE no action;
-    ALTER TABLE "import_sessions_rels" ADD CONSTRAINT "import_sessions_rels_users_fk" FOREIGN KEY ("users_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
+    ALTER TABLE "import_sessions" ADD CONSTRAINT "import_sessions_created_by_id_users_id_fk" FOREIGN KEY ("created_by_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;
 
     ALTER TABLE "product_candidates_proposed_image_paths" ADD CONSTRAINT "product_candidates_proposed_image_paths_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."product_candidates"("id") ON DELETE cascade ON UPDATE no action;
     ALTER TABLE "product_candidates_proposed_datasheet_paths" ADD CONSTRAINT "product_candidates_proposed_datasheet_paths_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."product_candidates"("id") ON DELETE cascade ON UPDATE no action;
 
-    ALTER TABLE "product_candidates_rels" ADD CONSTRAINT "product_candidates_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."product_candidates"("id") ON DELETE cascade ON UPDATE no action;
-    ALTER TABLE "product_candidates_rels" ADD CONSTRAINT "product_candidates_rels_import_sessions_fk" FOREIGN KEY ("import_sessions_id") REFERENCES "public"."import_sessions"("id") ON DELETE cascade ON UPDATE no action;
-    ALTER TABLE "product_candidates_rels" ADD CONSTRAINT "product_candidates_rels_products_fk" FOREIGN KEY ("products_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;
-    ALTER TABLE "product_candidates_rels" ADD CONSTRAINT "product_candidates_rels_users_fk" FOREIGN KEY ("users_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
+    ALTER TABLE "product_candidates" ADD CONSTRAINT "product_candidates_session_id_import_sessions_id_fk" FOREIGN KEY ("session_id") REFERENCES "public"."import_sessions"("id") ON DELETE cascade ON UPDATE no action;
+    ALTER TABLE "product_candidates" ADD CONSTRAINT "product_candidates_confirmed_product_id_products_id_fk" FOREIGN KEY ("confirmed_product_id") REFERENCES "public"."products"("id") ON DELETE set null ON UPDATE no action;
+    ALTER TABLE "product_candidates" ADD CONSTRAINT "product_candidates_reviewed_by_id_users_id_fk" FOREIGN KEY ("reviewed_by_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;
 
+    CREATE INDEX "import_sessions_created_by_idx" ON "import_sessions" USING btree ("created_by_id");
     CREATE INDEX "import_sessions_updated_at_idx" ON "import_sessions" USING btree ("updated_at");
     CREATE INDEX "import_sessions_created_at_idx" ON "import_sessions" USING btree ("created_at");
-    CREATE INDEX "import_sessions_rels_order_idx" ON "import_sessions_rels" USING btree ("order");
-    CREATE INDEX "import_sessions_rels_parent_idx" ON "import_sessions_rels" USING btree ("parent_id");
-    CREATE INDEX "import_sessions_rels_path_idx" ON "import_sessions_rels" USING btree ("path");
-    CREATE INDEX "import_sessions_rels_users_id_idx" ON "import_sessions_rels" USING btree ("users_id");
 
     CREATE INDEX "product_candidates_proposed_image_paths_order_idx" ON "product_candidates_proposed_image_paths" USING btree ("_order");
     CREATE INDEX "product_candidates_proposed_image_paths_parent_id_idx" ON "product_candidates_proposed_image_paths" USING btree ("_parent_id");
     CREATE INDEX "product_candidates_proposed_datasheet_paths_order_idx" ON "product_candidates_proposed_datasheet_paths" USING btree ("_order");
     CREATE INDEX "product_candidates_proposed_datasheet_paths_parent_id_idx" ON "product_candidates_proposed_datasheet_paths" USING btree ("_parent_id");
 
+    CREATE INDEX "product_candidates_session_idx" ON "product_candidates" USING btree ("session_id");
+    CREATE INDEX "product_candidates_confirmed_product_idx" ON "product_candidates" USING btree ("confirmed_product_id");
+    CREATE INDEX "product_candidates_reviewed_by_idx" ON "product_candidates" USING btree ("reviewed_by_id");
     CREATE INDEX "product_candidates_updated_at_idx" ON "product_candidates" USING btree ("updated_at");
     CREATE INDEX "product_candidates_created_at_idx" ON "product_candidates" USING btree ("created_at");
-    CREATE INDEX "product_candidates_rels_order_idx" ON "product_candidates_rels" USING btree ("order");
-    CREATE INDEX "product_candidates_rels_parent_idx" ON "product_candidates_rels" USING btree ("parent_id");
-    CREATE INDEX "product_candidates_rels_path_idx" ON "product_candidates_rels" USING btree ("path");
-    CREATE INDEX "product_candidates_rels_import_sessions_id_idx" ON "product_candidates_rels" USING btree ("import_sessions_id");
-    CREATE INDEX "product_candidates_rels_products_id_idx" ON "product_candidates_rels" USING btree ("products_id");
-    CREATE INDEX "product_candidates_rels_users_id_idx" ON "product_candidates_rels" USING btree ("users_id");
 
     ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "import_sessions_id" integer;
     ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "product_candidates_id" integer;
@@ -127,11 +105,9 @@ export async function down({ db }: MigrateDownArgs): Promise<void> {
     ALTER TABLE "payload_locked_documents_rels" DROP COLUMN IF EXISTS "product_candidates_id";
     ALTER TABLE "payload_locked_documents_rels" DROP COLUMN IF EXISTS "import_sessions_id";
 
-    DROP TABLE IF EXISTS "product_candidates_rels";
     DROP TABLE IF EXISTS "product_candidates_proposed_datasheet_paths";
     DROP TABLE IF EXISTS "product_candidates_proposed_image_paths";
     DROP TABLE IF EXISTS "product_candidates";
-    DROP TABLE IF EXISTS "import_sessions_rels";
     DROP TABLE IF EXISTS "import_sessions";
 
     DROP TYPE IF EXISTS "public"."enum_product_candidates_proposed_source_currency";
