@@ -30,6 +30,12 @@ services:
       - SEAFILE_ENCRYPTION_KEY=${SEAFILE_ENCRYPTION_KEY}
     volumes:
       - media_data:/app/media
+      # Claude CLI subscription credentials (read-only). Used by the
+      # interactive scan-supplier wizard. The container's app process runs
+      # as the `nextjs` system user (uid 1001), so the Claude CLI looks at
+      # /home/nextjs/.claude. The host directory /root/.claude must be
+      # readable by uid 1001 from inside the container (chmod a+rX).
+      - /root/.claude:/home/nextjs/.claude:ro
     depends_on:
       postgres:
         condition: service_healthy

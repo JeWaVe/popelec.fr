@@ -2,6 +2,7 @@ import * as XLSX from 'xlsx'
 import type { Payload } from 'payload'
 import { ProductStatuses } from '@/types/enums/product-status'
 import { TVARates } from '@/types/enums/tva-rate'
+import { slugify } from '@/lib/slug'
 
 interface ImportResult {
   created: number
@@ -86,16 +87,7 @@ export async function importFromExcel(
 
       const sku = String(mapped.sku).trim()
       const name = String(mapped.name).trim()
-      const slug = name
-        .toLowerCase()
-        .replace(/[éèêë]/g, 'e')
-        .replace(/[àâä]/g, 'a')
-        .replace(/[ùûü]/g, 'u')
-        .replace(/[ôö]/g, 'o')
-        .replace(/[îï]/g, 'i')
-        .replace(/ç/g, 'c')
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-|-$/g, '')
+      const slug = slugify(name)
 
       // Parse price (handle both cents and euros)
       let priceHT = 0

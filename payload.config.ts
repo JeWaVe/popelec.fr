@@ -14,6 +14,8 @@ import { Users } from '@/collections/Users'
 import { Media } from '@/collections/Media'
 import { Pages } from '@/collections/Pages'
 import { SharedFolders } from '@/collections/SharedFolders'
+import { ImportSessions } from '@/collections/ImportSessions'
+import { ProductCandidates } from '@/collections/ProductCandidates'
 import { SiteSettings } from '@/globals/SiteSettings'
 import { Navigation } from '@/globals/Navigation'
 
@@ -31,6 +33,20 @@ export default buildConfig({
     },
     components: {
       afterDashboard: ['@/components/admin/Dashboard'],
+      afterNavLinks: [
+        '@/components/admin/ImportSupplierNavLink',
+        '@/components/admin/ScanSupplierNavLink',
+      ],
+      views: {
+        importSupplier: {
+          Component: '@/components/admin/views/ImportSupplier',
+          path: '/import-supplier',
+        },
+        scanSupplier: {
+          Component: '@/components/admin/views/ScanSupplier',
+          path: '/scan-supplier',
+        },
+      },
     },
   },
   collections: [
@@ -42,6 +58,8 @@ export default buildConfig({
     Media,
     Pages,
     SharedFolders,
+    ImportSessions,
+    ProductCandidates,
   ],
   globals: [SiteSettings, Navigation],
   editor: lexicalEditor(),

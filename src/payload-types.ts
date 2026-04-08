@@ -75,6 +75,8 @@ export interface Config {
     media: Media;
     pages: Page;
     'shared-folders': SharedFolder;
+    'import-sessions': ImportSession;
+    'product-candidates': ProductCandidate;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -90,6 +92,8 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     'shared-folders': SharedFoldersSelect<false> | SharedFoldersSelect<true>;
+    'import-sessions': ImportSessionsSelect<false> | ImportSessionsSelect<true>;
+    'product-candidates': ProductCandidatesSelect<false> | ProductCandidatesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -233,6 +237,18 @@ export interface Product {
     description?: string | null;
   };
   relatedProducts?: (number | Product)[] | null;
+  importMeta?: {
+    /**
+     * Si coché, l'import automatique ne touchera plus ce produit.
+     */
+    locked?: boolean | null;
+    lastImportedAt?: string | null;
+    source?: string | null;
+    /**
+     * JSON des taux FX utilisés au dernier import (audit)
+     */
+    fxSnapshot?: string | null;
+  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -521,6 +537,89 @@ export interface SharedFolder {
   createdAt: string;
 }
 /**
+ * Sessions de scan interactif d’une bibliothèque Seafile fournisseur
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "import-sessions".
+ */
+export interface ImportSession {
+  id: number;
+  /**
+   * UUID de la bibliothèque Seafile scannée
+   */
+  libraryId: string;
+  libraryName: string;
+  /**
+   * Sous-dossier scanné dans la bibliothèque
+   */
+  path?: string | null;
+  status?: ('scanning' | 'ready' | 'in_review' | 'completed' | 'failed') | null;
+  scanStartedAt?: string | null;
+  scanCompletedAt?: string | null;
+  /**
+   * Snapshot JSON brut du listing Seafile (audit)
+   */
+  fileTreeJson?: string | null;
+  /**
+   * Réponse brute du LLM Claude (debug)
+   */
+  llmRawResponse?: string | null;
+  errorMessage?: string | null;
+  createdBy?: (number | null) | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Produits candidats détectés par le scan LLM, en attente de revue
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product-candidates".
+ */
+export interface ProductCandidate {
+  id: number;
+  session: number | ImportSession;
+  /**
+   * Position dans l’ordre du wizard
+   */
+  index: number;
+  status?: ('pending' | 'confirmed' | 'skipped' | 'error') | null;
+  proposedSku: string;
+  proposedName: string;
+  proposedNameEn?: string | null;
+  proposedShortDescription?: string | null;
+  proposedShortDescriptionEn?: string | null;
+  proposedCategorySlug?: string | null;
+  proposedBrand?: string | null;
+  proposedSourceCurrency?: ('USD' | 'CNY' | 'EUR') | null;
+  proposedSourceAmount?: number | null;
+  /**
+   * JSON: array of { label:{fr,en}, value:{fr,en}, unit?, group? }
+   */
+  proposedSpecsJson?: string | null;
+  proposedImagePaths?:
+    | {
+        path: string;
+        altFr?: string | null;
+        altEn?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  proposedDatasheetPaths?:
+    | {
+        path: string;
+        titleFr?: string | null;
+        titleEn?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  confirmedProduct?: (number | null) | Product;
+  errorMessage?: string | null;
+  reviewedAt?: string | null;
+  reviewedBy?: (number | null) | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -575,6 +674,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'shared-folders';
         value: number | SharedFolder;
+      } | null)
+    | ({
+        relationTo: 'import-sessions';
+        value: number | ImportSession;
+      } | null)
+    | ({
+        relationTo: 'product-candidates';
+        value: number | ProductCandidate;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -685,6 +792,14 @@ export interface ProductsSelect<T extends boolean = true> {
         description?: T;
       };
   relatedProducts?: T;
+  importMeta?:
+    | T
+    | {
+        locked?: T;
+        lastImportedAt?: T;
+        source?: T;
+        fxSnapshot?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -916,6 +1031,65 @@ export interface SharedFoldersSelect<T extends boolean = true> {
   allowedUsers?: T;
   description?: T;
   isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "import-sessions_select".
+ */
+export interface ImportSessionsSelect<T extends boolean = true> {
+  libraryId?: T;
+  libraryName?: T;
+  path?: T;
+  status?: T;
+  scanStartedAt?: T;
+  scanCompletedAt?: T;
+  fileTreeJson?: T;
+  llmRawResponse?: T;
+  errorMessage?: T;
+  createdBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product-candidates_select".
+ */
+export interface ProductCandidatesSelect<T extends boolean = true> {
+  session?: T;
+  index?: T;
+  status?: T;
+  proposedSku?: T;
+  proposedName?: T;
+  proposedNameEn?: T;
+  proposedShortDescription?: T;
+  proposedShortDescriptionEn?: T;
+  proposedCategorySlug?: T;
+  proposedBrand?: T;
+  proposedSourceCurrency?: T;
+  proposedSourceAmount?: T;
+  proposedSpecsJson?: T;
+  proposedImagePaths?:
+    | T
+    | {
+        path?: T;
+        altFr?: T;
+        altEn?: T;
+        id?: T;
+      };
+  proposedDatasheetPaths?:
+    | T
+    | {
+        path?: T;
+        titleFr?: T;
+        titleEn?: T;
+        id?: T;
+      };
+  confirmedProduct?: T;
+  errorMessage?: T;
+  reviewedAt?: T;
+  reviewedBy?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -28,6 +28,11 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# Claude Code CLI — used by the interactive scan-supplier wizard. Reads its
+# subscription credentials from /home/nextjs/.claude (bind-mounted from the
+# host's ~/.claude). Installed as root before we drop to the nextjs user.
+RUN npm install -g @anthropic-ai/claude-code
+
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 

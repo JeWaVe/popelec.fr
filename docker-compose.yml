@@ -26,6 +26,9 @@ services:
       - .:/app
       - node_modules:/app/node_modules
       - next_cache:/app/.next
+      # Claude CLI subscription credentials (read-only) — used by the
+      # interactive scan-supplier wizard. The host directory must exist.
+      - ${HOME}/.claude:/root/.claude:ro
     environment:
       DATABASE_URI: postgresql://payload:payload@postgres:5432/popelec
       PAYLOAD_SECRET: dev-secret-do-not-use-in-production

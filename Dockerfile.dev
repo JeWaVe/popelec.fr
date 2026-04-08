@@ -2,6 +2,10 @@ FROM node:22-alpine
 
 RUN apk add --no-cache libc6-compat
 
+# Claude Code CLI — used by the interactive scan-supplier wizard. Reads its
+# subscription credentials from /root/.claude (bind-mounted from the host).
+RUN npm install -g @anthropic-ai/claude-code
+
 WORKDIR /app
 
 EXPOSE 3000

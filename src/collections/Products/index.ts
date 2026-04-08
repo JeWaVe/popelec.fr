@@ -210,5 +210,42 @@ export const Products: CollectionConfig = {
       relationTo: 'products',
       hasMany: true,
     },
+
+    // --- Import metadata ---
+    {
+      name: 'importMeta',
+      type: 'group',
+      label: 'Import automatique',
+      admin: { position: 'sidebar' },
+      fields: [
+        {
+          name: 'locked',
+          type: 'checkbox',
+          defaultValue: false,
+          label: 'Verrouillé contre l\'import',
+          admin: {
+            description: "Si coché, l'import automatique ne touchera plus ce produit.",
+          },
+        },
+        {
+          name: 'lastImportedAt',
+          type: 'date',
+          admin: { readOnly: true },
+        },
+        {
+          name: 'source',
+          type: 'text',
+          admin: { readOnly: true },
+        },
+        {
+          name: 'fxSnapshot',
+          type: 'text',
+          admin: {
+            readOnly: true,
+            description: 'JSON des taux FX utilisés au dernier import (audit)',
+          },
+        },
+      ],
+    },
   ],
 }

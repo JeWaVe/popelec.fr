@@ -9,6 +9,7 @@ const CATEGORIES = [
   { name: 'Variateurs & Contrôleurs', slug: 'variateurs', nameEn: 'Inverters & Controllers', sortOrder: 2 },
   { name: 'Disjoncteurs', slug: 'disjoncteurs', nameEn: 'Circuit Breakers', sortOrder: 3 },
   { name: 'Armoires électriques', slug: 'armoires', nameEn: 'Electrical Cabinets', sortOrder: 4 },
+  { name: 'Démarreurs progressifs', slug: 'demarreurs', nameEn: 'Soft Starters', sortOrder: 5 },
 ]
 
 const PRODUCTS = [

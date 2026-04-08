@@ -38,3 +38,9 @@ media/
 # backups
 backups/
 .claude/
+
+# import script local cache (FX rates etc.)
+.cache/
+
+# local supplier-data drops (large image/PDF dumps — live in Seafile)
+nuomake/

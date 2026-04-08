@@ -1,0 +1,767 @@
+version: 1
+supplier:
+  name: "Yueqing Nuomake Technology Co., Ltd."
+  reference: "nuomake-2026-04"
+
+defaults:
+  tvaRate: standard
+  trackStock: true
+  lowStockThreshold: 5
+  initialStock: 10
+  status: draft
+
+# ---------------------------------------------------------------------------
+# 18 frequency-inverter SKUs from the March 2026 USD price list
+# (变频器 Variable Frequency Drive 2026.3.9 美元价格.pdf)
+#
+# The supplier's PDF has several SKU collisions across the three input/output
+# variants. We disambiguate with a -1P / -3P220 suffix and keep the original
+# typo'd reference in `originSku` for traceability.
+# ---------------------------------------------------------------------------
+products:
+  # === Group 1: 1ph 220V in → 1ph 220V out ================================
+  - sku: MC9001-2S007G-1P
+    category: variateurs
+    brand: NUOMAKE
+    name:
+      fr: "Variateur de fréquence MC9000 0,75 kW — 1ph 220V → 1ph 220V"
+      en: "MC9000 frequency inverter 0.75 kW — 1ph 220V → 1ph 220V"
+    shortDescription:
+      fr: "Variateur de fréquence Nuomake 0,75 kW, entrée monophasée 220V, sortie monophasée 220V."
+      en: "Nuomake 0.75 kW frequency inverter, 1-phase 220V in, 1-phase 220V out."
+    source:
+      currency: USD
+      amount: 73
+      originSku: MC9001-2S007G
+    specs:
+      - label: { fr: "Puissance",  en: "Power" }
+        value: { fr: "0,75",      en: "0.75" }
+        unit: "kW"
+        group: "Électrique"
+      - label: { fr: "Entrée",     en: "Input" }
+        value: { fr: "220 V monophasé", en: "220 V single-phase" }
+        group: "Électrique"
+      - label: { fr: "Sortie",     en: "Output" }
+        value: { fr: "220 V monophasé", en: "220 V single-phase" }
+        group: "Électrique"
+    images:
+      - path: "documents-export-2026-04-07(2)/inverter1.5kw  2.2kw 3kw7Q9A9475.png"
+        alt: { fr: "Variateur Nuomake MC9000", en: "Nuomake MC9000 inverter" }
+
+  - sku: MC9001-2S0015G-1P
+    category: variateurs
+    brand: NUOMAKE
+    name:
+      fr: "Variateur de fréquence MC9000 1,5 kW — 1ph 220V → 1ph 220V"
+      en: "MC9000 frequency inverter 1.5 kW — 1ph 220V → 1ph 220V"
+    shortDescription:
+      fr: "Variateur de fréquence Nuomake 1,5 kW, entrée et sortie monophasées 220V."
+      en: "Nuomake 1.5 kW frequency inverter, 1-phase 220V in/out."
+    source:
+      currency: USD
+      amount: 87
+      originSku: MC9001-2S0015G
+    specs:
+      - label: { fr: "Puissance", en: "Power" }
+        value: { fr: "1,5",       en: "1.5" }
+        unit: "kW"
+        group: "Électrique"
+      - label: { fr: "Entrée",  en: "Input" }
+        value: { fr: "220 V monophasé", en: "220 V single-phase" }
+        group: "Électrique"
+      - label: { fr: "Sortie",  en: "Output" }
+        value: { fr: "220 V monophasé", en: "220 V single-phase" }
+        group: "Électrique"
+    images:
+      - path: "documents-export-2026-04-07(2)/inverter1.5kw  2.2kw 3kw7Q9A9486.png"
+        alt: { fr: "Variateur Nuomake MC9000 1,5 kW", en: "Nuomake MC9000 1.5 kW inverter" }
+
+  - sku: MC9001-2S0022G-1P
+    category: variateurs
+    brand: NUOMAKE
+    name:
+      fr: "Variateur de fréquence MC9000 2,2 kW — 1ph 220V → 1ph 220V"
+      en: "MC9000 frequency inverter 2.2 kW — 1ph 220V → 1ph 220V"
+    shortDescription:
+      fr: "Variateur de fréquence Nuomake 2,2 kW, entrée et sortie monophasées 220V."
+      en: "Nuomake 2.2 kW frequency inverter, 1-phase 220V in/out."
+    source:
+      currency: USD
+      amount: 96
+      originSku: MC9001-2S0022G
+    specs:
+      - label: { fr: "Puissance", en: "Power" }
+        value: { fr: "2,2",       en: "2.2" }
+        unit: "kW"
+        group: "Électrique"
+      - label: { fr: "Entrée",  en: "Input" }
+        value: { fr: "220 V monophasé", en: "220 V single-phase" }
+        group: "Électrique"
+      - label: { fr: "Sortie",  en: "Output" }
+        value: { fr: "220 V monophasé", en: "220 V single-phase" }
+        group: "Électrique"
+    images:
+      - path: "documents-export-2026-04-07(2)/inverter1.5kw  2.2kw 3kw7Q9A9492.png"
+        alt: { fr: "Variateur Nuomake MC9000 2,2 kW", en: "Nuomake MC9000 2.2 kW inverter" }
+
+  - sku: MC9001-2S040G-1P
+    category: variateurs
+    brand: NUOMAKE
+    name:
+      fr: "Variateur de fréquence MC9000 4 kW — 1ph 220V → 1ph 220V"
+      en: "MC9000 frequency inverter 4 kW — 1ph 220V → 1ph 220V"
+    shortDescription:
+      fr: "Variateur de fréquence Nuomake 4 kW, entrée et sortie monophasées 220V."
+      en: "Nuomake 4 kW frequency inverter, 1-phase 220V in/out."
+    source:
+      currency: USD
+      amount: 143
+      originSku: MC9001-2S040G
+    specs:
+      - label: { fr: "Puissance", en: "Power" }
+        value: { fr: "4",         en: "4" }
+        unit: "kW"
+        group: "Électrique"
+      - label: { fr: "Entrée",  en: "Input" }
+        value: { fr: "220 V monophasé", en: "220 V single-phase" }
+        group: "Électrique"
+      - label: { fr: "Sortie",  en: "Output" }
+        value: { fr: "220 V monophasé", en: "220 V single-phase" }
+        group: "Électrique"
+    images:
+      - path: "documents-export-2026-04-07(1)/inverter 4kw 5kw 7Q9A9428.png"
+        alt: { fr: "Variateur Nuomake MC9000 4 kW", en: "Nuomake MC9000 4 kW inverter" }
+
+  - sku: MC9001-2S0550G-1P
+    category: variateurs
+    brand: NUOMAKE
+    name:
+      fr: "Variateur de fréquence MC9000 5,5 kW — 1ph 220V → 1ph 220V"
+      en: "MC9000 frequency inverter 5.5 kW — 1ph 220V → 1ph 220V"
+    shortDescription:
+      fr: "Variateur de fréquence Nuomake 5,5 kW, entrée et sortie monophasées 220V."
+      en: "Nuomake 5.5 kW frequency inverter, 1-phase 220V in/out."
+    source:
+      currency: USD
+      amount: 170
+      originSku: MC9001-2S0550G
+    specs:
+      - label: { fr: "Puissance", en: "Power" }
+        value: { fr: "5,5",       en: "5.5" }
+        unit: "kW"
+        group: "Électrique"
+      - label: { fr: "Entrée",  en: "Input" }
+        value: { fr: "220 V monophasé", en: "220 V single-phase" }
+        group: "Électrique"
+      - label: { fr: "Sortie",  en: "Output" }
+        value: { fr: "220 V monophasé", en: "220 V single-phase" }
+        group: "Électrique"
+    images:
+      - path: "documents-export-2026-04-07(1)/inverter 4kw 5kw 7Q9A9434.png"
+        alt: { fr: "Variateur Nuomake MC9000 5,5 kW", en: "Nuomake MC9000 5.5 kW inverter" }
+
+  - sku: MC9001-2S0075G-1P
+    category: variateurs
+    brand: NUOMAKE
+    name:
+      fr: "Variateur de fréquence MC9000 7,5 kW — 1ph 220V → 1ph 220V"
+      en: "MC9000 frequency inverter 7.5 kW — 1ph 220V → 1ph 220V"
+    shortDescription:
+      fr: "Variateur de fréquence Nuomake 7,5 kW, entrée et sortie monophasées 220V (modèle haut de gamme)."
+      en: "Nuomake 7.5 kW frequency inverter, 1-phase 220V in/out (top of range)."
+    source:
+      currency: USD
+      amount: 231
+      originSku: MC9001-2S0075G
+    specs:
+      - label: { fr: "Puissance", en: "Power" }
+        value: { fr: "7,5",       en: "7.5" }
+        unit: "kW"
+        group: "Électrique"
+      - label: { fr: "Entrée",  en: "Input" }
+        value: { fr: "220 V monophasé", en: "220 V single-phase" }
+        group: "Électrique"
+      - label: { fr: "Sortie",  en: "Output" }
+        value: { fr: "220 V monophasé", en: "220 V single-phase" }
+        group: "Électrique"
+    images:
+      - path: "documents-export-2026-04-07(1)/inverter 7.5kw  7Q9A9362.png"
+        alt: { fr: "Variateur Nuomake MC9000 7,5 kW", en: "Nuomake MC9000 7.5 kW inverter" }
+
+  # === Group 2: 1ph 220V in → 3ph 220V out ================================
+  - sku: MC9001-2S0007G-3P220
+    category: variateurs
+    brand: NUOMAKE
+    name:
+      fr: "Variateur de fréquence MC9000 0,75 kW — 1ph 220V → 3ph 220V"
+      en: "MC9000 frequency inverter 0.75 kW — 1ph 220V → 3ph 220V"
+    shortDescription:
+      fr: "Variateur de fréquence Nuomake 0,75 kW, entrée monophasée 220V, sortie triphasée 220V."
+      en: "Nuomake 0.75 kW frequency inverter, 1-phase 220V in, 3-phase 220V out."
+    source:
+      currency: USD
+      amount: 66
+      originSku: MC9001-2S0007G
+    specs:
+      - label: { fr: "Puissance", en: "Power" }
+        value: { fr: "0,75",      en: "0.75" }
+        unit: "kW"
+        group: "Électrique"
+      - label: { fr: "Entrée",  en: "Input" }
+        value: { fr: "220 V monophasé", en: "220 V single-phase" }
+        group: "Électrique"
+      - label: { fr: "Sortie",  en: "Output" }
+        value: { fr: "220 V triphasé", en: "220 V three-phase" }
+        group: "Électrique"
+    images:
+      - path: "documents-export-2026-04-07(2)/inverter1.5kw  2.2kw 3kw7Q9A9500.png"
+        alt: { fr: "Variateur Nuomake MC9000", en: "Nuomake MC9000 inverter" }
+
+  - sku: MC9001-2S0015G-3P220
+    category: variateurs
+    brand: NUOMAKE
+    name:
+      fr: "Variateur de fréquence MC9000 1,5 kW — 1ph 220V → 3ph 220V"
+      en: "MC9000 frequency inverter 1.5 kW — 1ph 220V → 3ph 220V"
+    shortDescription:
+      fr: "Variateur de fréquence Nuomake 1,5 kW, entrée monophasée 220V, sortie triphasée 220V."
+      en: "Nuomake 1.5 kW frequency inverter, 1-phase 220V in, 3-phase 220V out."
+    source:
+      currency: USD
+      amount: 87
+      originSku: MC9001-2S0015G
+    specs:
+      - label: { fr: "Puissance", en: "Power" }
+        value: { fr: "1,5",       en: "1.5" }
+        unit: "kW"
+        group: "Électrique"
+      - label: { fr: "Entrée",  en: "Input" }
+        value: { fr: "220 V monophasé", en: "220 V single-phase" }
+        group: "Électrique"
+      - label: { fr: "Sortie",  en: "Output" }
+        value: { fr: "220 V triphasé", en: "220 V three-phase" }
+        group: "Électrique"
+    images:
+      - path: "documents-export-2026-04-07(2)/inverter1.5kw  2.2kw 3kw7Q9A9507.png"
+        alt: { fr: "Variateur Nuomake MC9000 1,5 kW", en: "Nuomake MC9000 1.5 kW inverter" }
+
+  - sku: MC9001-2S0022G-3P220
+    category: variateurs
+    brand: NUOMAKE
+    name:
+      fr: "Variateur de fréquence MC9000 2,2 kW — 1ph 220V → 3ph 220V"
+      en: "MC9000 frequency inverter 2.2 kW — 1ph 220V → 3ph 220V"
+    shortDescription:
+      fr: "Variateur de fréquence Nuomake 2,2 kW, entrée monophasée 220V, sortie triphasée 220V."
+      en: "Nuomake 2.2 kW frequency inverter, 1-phase 220V in, 3-phase 220V out."
+    source:
+      currency: USD
+      amount: 96
+      originSku: MC9001-2S0022G
+    specs:
+      - label: { fr: "Puissance", en: "Power" }
+        value: { fr: "2,2",       en: "2.2" }
+        unit: "kW"
+        group: "Électrique"
+      - label: { fr: "Entrée",  en: "Input" }
+        value: { fr: "220 V monophasé", en: "220 V single-phase" }
+        group: "Électrique"
+      - label: { fr: "Sortie",  en: "Output" }
+        value: { fr: "220 V triphasé", en: "220 V three-phase" }
+        group: "Électrique"
+    images:
+      - path: "documents-export-2026-04-07(2)/inverter1.5kw  2.2kw 3kw7Q9A9509.png"
+        alt: { fr: "Variateur Nuomake MC9000 2,2 kW", en: "Nuomake MC9000 2.2 kW inverter" }
+
+  - sku: MC9001-2S0040G-3P220
+    category: variateurs
+    brand: NUOMAKE
+    name:
+      fr: "Variateur de fréquence MC9000 4 kW — 1ph 220V → 3ph 220V"
+      en: "MC9000 frequency inverter 4 kW — 1ph 220V → 3ph 220V"
+    shortDescription:
+      fr: "Variateur de fréquence Nuomake 4 kW, entrée monophasée 220V, sortie triphasée 220V."
+      en: "Nuomake 4 kW frequency inverter, 1-phase 220V in, 3-phase 220V out."
+    source:
+      currency: USD
+      amount: 124
+      originSku: MC9001-2S0040G
+    specs:
+      - label: { fr: "Puissance", en: "Power" }
+        value: { fr: "4",         en: "4" }
+        unit: "kW"
+        group: "Électrique"
+      - label: { fr: "Entrée",  en: "Input" }
+        value: { fr: "220 V monophasé", en: "220 V single-phase" }
+        group: "Électrique"
+      - label: { fr: "Sortie",  en: "Output" }
+        value: { fr: "220 V triphasé", en: "220 V three-phase" }
+        group: "Électrique"
+    images:
+      - path: "documents-export-2026-04-07(1)/inverter 4kw 5kw 7Q9A9441.png"
+        alt: { fr: "Variateur Nuomake MC9000 4 kW", en: "Nuomake MC9000 4 kW inverter" }
+
+  - sku: MC9001-2S0055G-3P220
+    category: variateurs
+    brand: NUOMAKE
+    name:
+      fr: "Variateur de fréquence MC9000 5,5 kW — 1ph 220V → 3ph 220V"
+      en: "MC9000 frequency inverter 5.5 kW — 1ph 220V → 3ph 220V"
+    shortDescription:
+      fr: "Variateur de fréquence Nuomake 5,5 kW, entrée monophasée 220V, sortie triphasée 220V."
+      en: "Nuomake 5.5 kW frequency inverter, 1-phase 220V in, 3-phase 220V out."
+    source:
+      currency: USD
+      amount: 143
+      originSku: MC9001-2S0055G
+    specs:
+      - label: { fr: "Puissance", en: "Power" }
+        value: { fr: "5,5",       en: "5.5" }
+        unit: "kW"
+        group: "Électrique"
+      - label: { fr: "Entrée",  en: "Input" }
+        value: { fr: "220 V monophasé", en: "220 V single-phase" }
+        group: "Électrique"
+      - label: { fr: "Sortie",  en: "Output" }
+        value: { fr: "220 V triphasé", en: "220 V three-phase" }
+        group: "Électrique"
+    images:
+      - path: "documents-export-2026-04-07(1)/inverter 4kw 5kw 7Q9A9456.png"
+        alt: { fr: "Variateur Nuomake MC9000 5,5 kW", en: "Nuomake MC9000 5.5 kW inverter" }
+
+  - sku: MC9001-2S0045G-3P220
+    category: variateurs
+    brand: NUOMAKE
+    name:
+      fr: "Variateur de fréquence MC9000 7,5 kW — 1ph 220V → 3ph 220V"
+      en: "MC9000 frequency inverter 7.5 kW — 1ph 220V → 3ph 220V"
+    shortDescription:
+      fr: "Variateur de fréquence Nuomake 7,5 kW, entrée monophasée 220V, sortie triphasée 220V."
+      en: "Nuomake 7.5 kW frequency inverter, 1-phase 220V in, 3-phase 220V out."
+    source:
+      currency: USD
+      amount: 165
+      originSku: MC9001-2S0045G
+    specs:
+      - label: { fr: "Puissance", en: "Power" }
+        value: { fr: "7,5",       en: "7.5" }
+        unit: "kW"
+        group: "Électrique"
+      - label: { fr: "Entrée",  en: "Input" }
+        value: { fr: "220 V monophasé", en: "220 V single-phase" }
+        group: "Électrique"
+      - label: { fr: "Sortie",  en: "Output" }
+        value: { fr: "220 V triphasé", en: "220 V three-phase" }
+        group: "Électrique"
+    images:
+      - path: "documents-export-2026-04-07(1)/inverter 7.5kw  7Q9A9393.png"
+        alt: { fr: "Variateur Nuomake MC9000 7,5 kW", en: "Nuomake MC9000 7.5 kW inverter" }
+
+  # === Group 3: 1ph 220V in → 3ph 380V out ================================
+  - sku: MC9001-2T0007G
+    category: variateurs
+    brand: NUOMAKE
+    name:
+      fr: "Variateur de fréquence MC9000 0,75 kW — 1ph 220V → 3ph 380V"
+      en: "MC9000 frequency inverter 0.75 kW — 1ph 220V → 3ph 380V"
+    shortDescription:
+      fr: "Variateur de fréquence Nuomake 0,75 kW, entrée monophasée 220V, sortie triphasée 380V."
+      en: "Nuomake 0.75 kW frequency inverter, 1-phase 220V in, 3-phase 380V out."
+    source:
+      currency: USD
+      amount: 66
+    specs:
+      - label: { fr: "Puissance", en: "Power" }
+        value: { fr: "0,75",      en: "0.75" }
+        unit: "kW"
+        group: "Électrique"
+      - label: { fr: "Entrée",  en: "Input" }
+        value: { fr: "220 V monophasé", en: "220 V single-phase" }
+        group: "Électrique"
+      - label: { fr: "Sortie",  en: "Output" }
+        value: { fr: "380 V triphasé", en: "380 V three-phase" }
+        group: "Électrique"
+    images:
+      - path: "documents-export-2026-04-07(2)/inverter1.5kw  2.2kw 3kw7Q9A9514.png"
+        alt: { fr: "Variateur Nuomake MC9000 0,75 kW 380V", en: "Nuomake MC9000 0.75 kW 380V inverter" }
+
+  - sku: MC9001-2T0015G
+    category: variateurs
+    brand: NUOMAKE
+    name:
+      fr: "Variateur de fréquence MC9000 1,5 kW — 1ph 220V → 3ph 380V"
+      en: "MC9000 frequency inverter 1.5 kW — 1ph 220V → 3ph 380V"
+    shortDescription:
+      fr: "Variateur de fréquence Nuomake 1,5 kW, entrée monophasée 220V, sortie triphasée 380V."
+      en: "Nuomake 1.5 kW frequency inverter, 1-phase 220V in, 3-phase 380V out."
+    source:
+      currency: USD
+      amount: 67
+    specs:
+      - label: { fr: "Puissance", en: "Power" }
+        value: { fr: "1,5",       en: "1.5" }
+        unit: "kW"
+        group: "Électrique"
+      - label: { fr: "Entrée",  en: "Input" }
+        value: { fr: "220 V monophasé", en: "220 V single-phase" }
+        group: "Électrique"
+      - label: { fr: "Sortie",  en: "Output" }
+        value: { fr: "380 V triphasé", en: "380 V three-phase" }
+        group: "Électrique"
+    images:
+      - path: "documents-export-2026-04-07(2)/inverter1.5kw  2.2kw 3kw7Q9A9475.png"
+        alt: { fr: "Variateur Nuomake MC9000 1,5 kW 380V", en: "Nuomake MC9000 1.5 kW 380V inverter" }
+
+  - sku: MC9001-2T0022G
+    category: variateurs
+    brand: NUOMAKE
+    name:
+      fr: "Variateur de fréquence MC9000 2,2 kW — 1ph 220V → 3ph 380V"
+      en: "MC9000 frequency inverter 2.2 kW — 1ph 220V → 3ph 380V"
+    shortDescription:
+      fr: "Variateur de fréquence Nuomake 2,2 kW, entrée monophasée 220V, sortie triphasée 380V."
+      en: "Nuomake 2.2 kW frequency inverter, 1-phase 220V in, 3-phase 380V out."
+    source:
+      currency: USD
+      amount: 87
+    specs:
+      - label: { fr: "Puissance", en: "Power" }
+        value: { fr: "2,2",       en: "2.2" }
+        unit: "kW"
+        group: "Électrique"
+      - label: { fr: "Entrée",  en: "Input" }
+        value: { fr: "220 V monophasé", en: "220 V single-phase" }
+        group: "Électrique"
+      - label: { fr: "Sortie",  en: "Output" }
+        value: { fr: "380 V triphasé", en: "380 V three-phase" }
+        group: "Électrique"
+    images:
+      - path: "documents-export-2026-04-07(2)/inverter1.5kw  2.2kw 3kw7Q9A9486.png"
+        alt: { fr: "Variateur Nuomake MC9000 2,2 kW 380V", en: "Nuomake MC9000 2.2 kW 380V inverter" }
+
+  - sku: MC9001-2T0040G
+    category: variateurs
+    brand: NUOMAKE
+    name:
+      fr: "Variateur de fréquence MC9000 4 kW — 1ph 220V → 3ph 380V"
+      en: "MC9000 frequency inverter 4 kW — 1ph 220V → 3ph 380V"
+    shortDescription:
+      fr: "Variateur de fréquence Nuomake 4 kW, entrée monophasée 220V, sortie triphasée 380V."
+      en: "Nuomake 4 kW frequency inverter, 1-phase 220V in, 3-phase 380V out."
+    source:
+      currency: USD
+      amount: 96
+    specs:
+      - label: { fr: "Puissance", en: "Power" }
+        value: { fr: "4",         en: "4" }
+        unit: "kW"
+        group: "Électrique"
+      - label: { fr: "Entrée",  en: "Input" }
+        value: { fr: "220 V monophasé", en: "220 V single-phase" }
+        group: "Électrique"
+      - label: { fr: "Sortie",  en: "Output" }
+        value: { fr: "380 V triphasé", en: "380 V three-phase" }
+        group: "Électrique"
+    images:
+      - path: "documents-export-2026-04-07(1)/inverter 4kw 5kw 7Q9A9461.png"
+        alt: { fr: "Variateur Nuomake MC9000 4 kW 380V", en: "Nuomake MC9000 4 kW 380V inverter" }
+
+  - sku: MC9001-2T0055G
+    category: variateurs
+    brand: NUOMAKE
+    name:
+      fr: "Variateur de fréquence MC9000 5,5 kW — 1ph 220V → 3ph 380V"
+      en: "MC9000 frequency inverter 5.5 kW — 1ph 220V → 3ph 380V"
+    shortDescription:
+      fr: "Variateur de fréquence Nuomake 5,5 kW, entrée monophasée 220V, sortie triphasée 380V."
+      en: "Nuomake 5.5 kW frequency inverter, 1-phase 220V in, 3-phase 380V out."
+    source:
+      currency: USD
+      amount: 123
+    specs:
+      - label: { fr: "Puissance", en: "Power" }
+        value: { fr: "5,5",       en: "5.5" }
+        unit: "kW"
+        group: "Électrique"
+      - label: { fr: "Entrée",  en: "Input" }
+        value: { fr: "220 V monophasé", en: "220 V single-phase" }
+        group: "Électrique"
+      - label: { fr: "Sortie",  en: "Output" }
+        value: { fr: "380 V triphasé", en: "380 V three-phase" }
+        group: "Électrique"
+    images:
+      - path: "documents-export-2026-04-07(1)/inverter 4kw 5kw 7Q9A9471.png"
+        alt: { fr: "Variateur Nuomake MC9000 5,5 kW 380V", en: "Nuomake MC9000 5.5 kW 380V inverter" }
+
+  - sku: MC9001-2T0045G
+    category: variateurs
+    brand: NUOMAKE
+    name:
+      fr: "Variateur de fréquence MC9000 7,5 kW — 1ph 220V → 3ph 380V"
+      en: "MC9000 frequency inverter 7.5 kW — 1ph 220V → 3ph 380V"
+    shortDescription:
+      fr: "Variateur de fréquence Nuomake 7,5 kW, entrée monophasée 220V, sortie triphasée 380V (modèle haut de gamme)."
+      en: "Nuomake 7.5 kW frequency inverter, 1-phase 220V in, 3-phase 380V out (top of range)."
+    source:
+      currency: USD
+      amount: 143
+    specs:
+      - label: { fr: "Puissance", en: "Power" }
+        value: { fr: "7,5",       en: "7.5" }
+        unit: "kW"
+        group: "Électrique"
+      - label: { fr: "Entrée",  en: "Input" }
+        value: { fr: "220 V monophasé", en: "220 V single-phase" }
+        group: "Électrique"
+      - label: { fr: "Sortie",  en: "Output" }
+        value: { fr: "380 V triphasé", en: "380 V three-phase" }
+        group: "Électrique"
+    images:
+      - path: "documents-export-2026-04-07(1)/inverter 7.5kw  7Q9A9394.png"
+        alt: { fr: "Variateur Nuomake MC9000 7,5 kW 380V", en: "Nuomake MC9000 7.5 kW 380V inverter" }
+
+  # ---------------------------------------------------------------------------
+  # 8 items from the March 2026 proforma invoice (NMK20260322)
+  # FedEx line is intentionally skipped — it's a shipping line, not a product.
+  # ---------------------------------------------------------------------------
+
+  - sku: NMK-GMOT-IE3-750W-GR5
+    category: moteurs
+    brand: NUOMAKE
+    name:
+      fr: "Moto-réducteur IE3 0,75 kW — arbre 28 mm, ratio 5:1, 290 tr/min"
+      en: "IE3 geared motor 0.75 kW — 28 mm shaft, 5:1 ratio, 290 RPM"
+    shortDescription:
+      fr: "Moto-réducteur horizontal IE3 750 W, arbre 28 mm, rapport 5:1 (290 tr/min). Entrée monophasée 220V, sortie triphasée 220V."
+      en: "IE3 horizontal geared motor 750 W, 28 mm shaft, 5:1 ratio (290 RPM). 1-phase 220V in, 3-phase 220V out."
+    source:
+      currency: CNY
+      amount: 854
+    specs:
+      - label: { fr: "Puissance", en: "Power" }
+        value: { fr: "0,75",      en: "0.75" }
+        unit: "kW"
+        group: "Électrique"
+      - label: { fr: "Vitesse de sortie", en: "Output speed" }
+        value: { fr: "290",       en: "290" }
+        unit: "tr/min"
+        group: "Mécanique"
+      - label: { fr: "Rapport de réduction", en: "Gear ratio" }
+        value: { fr: "5:1",       en: "5:1" }
+        group: "Mécanique"
+      - label: { fr: "Diamètre arbre", en: "Shaft diameter" }
+        value: { fr: "28",        en: "28" }
+        unit: "mm"
+        group: "Mécanique"
+      - label: { fr: "Classe", en: "Efficiency class" }
+        value: { fr: "IE3",       en: "IE3" }
+        group: "Rendement"
+    images:
+      - path: "documents-export-2026-04-07(2)/MOTOR Picture 1.jpg"
+        alt: { fr: "Moto-réducteur Nuomake IE3", en: "Nuomake IE3 geared motor" }
+
+  - sku: NMK-MOT-IE3-075KW-3P
+    category: moteurs
+    brand: NUOMAKE
+    name:
+      fr: "Moteur asynchrone IE3 0,75 kW — triphasé 1500 tr/min"
+      en: "IE3 asynchronous motor 0.75 kW — 3-phase 1500 RPM"
+    shortDescription:
+      fr: "Moteur asynchrone triphasé IE3 750 W, 1500 tr/min."
+      en: "IE3 3-phase asynchronous motor 750 W, 1500 RPM."
+    source:
+      currency: CNY
+      amount: 574
+    specs:
+      - label: { fr: "Puissance", en: "Power" }
+        value: { fr: "0,75",      en: "0.75" }
+        unit: "kW"
+        group: "Électrique"
+      - label: { fr: "Vitesse",  en: "Speed" }
+        value: { fr: "1500",      en: "1500" }
+        unit: "tr/min"
+        group: "Mécanique"
+      - label: { fr: "Phases",   en: "Phases" }
+        value: { fr: "3",         en: "3" }
+        group: "Électrique"
+      - label: { fr: "Classe",   en: "Efficiency class" }
+        value: { fr: "IE3",       en: "IE3" }
+        group: "Rendement"
+    images:
+      - path: "documents-export-2026-04-07(2)/motor picture 2.jpg"
+        alt: { fr: "Moteur Nuomake IE3", en: "Nuomake IE3 motor" }
+
+  - sku: NMK-SOFTSTART-MCR8-15KW
+    category: demarreurs
+    brand: NUOMAKE
+    name:
+      fr: "Démarreur progressif MCR8 — 15 kW"
+      en: "MCR8 soft starter — 15 kW"
+    shortDescription:
+      fr: "Démarreur progressif Nuomake MCR8 pour moteurs jusqu'à 15 kW. Limite le courant de démarrage et protège les enroulements."
+      en: "Nuomake MCR8 soft starter for motors up to 15 kW. Limits inrush current and protects motor windings."
+    source:
+      currency: CNY
+      amount: 1197
+    specs:
+      - label: { fr: "Puissance max", en: "Max power" }
+        value: { fr: "15",        en: "15" }
+        unit: "kW"
+        group: "Électrique"
+      - label: { fr: "Modèle",    en: "Model" }
+        value: { fr: "MCR8",      en: "MCR8" }
+        group: "Référence"
+    images:
+      - path: "documents-export-2026-04-07/inerter 11kw 15kw  7Q9A9335.png"
+        alt: { fr: "Démarreur progressif Nuomake MCR8", en: "Nuomake MCR8 soft starter" }
+
+  - sku: NMK-MOT-YE3-631-4-012KW
+    category: moteurs
+    brand: NUOMAKE
+    name:
+      fr: "Moteur asynchrone YE3-631-4 — 0,12 kW triphasé"
+      en: "YE3-631-4 asynchronous motor — 0.12 kW 3-phase"
+    shortDescription:
+      fr: "Moteur asynchrone triphasé Nuomake YE3-631-4 de 120 W, 4 pôles, classe IE3."
+      en: "Nuomake YE3-631-4 3-phase asynchronous motor, 120 W, 4-pole, IE3 efficiency class."
+    source:
+      currency: CNY
+      amount: 301
+    specs:
+      - label: { fr: "Puissance", en: "Power" }
+        value: { fr: "0,12",      en: "0.12" }
+        unit: "kW"
+        group: "Électrique"
+      - label: { fr: "Modèle",   en: "Model" }
+        value: { fr: "YE3-631-4", en: "YE3-631-4" }
+        group: "Référence"
+      - label: { fr: "Pôles",   en: "Poles" }
+        value: { fr: "4",         en: "4" }
+        group: "Mécanique"
+      - label: { fr: "Classe",   en: "Efficiency class" }
+        value: { fr: "IE3",       en: "IE3" }
+        group: "Rendement"
+    images:
+      - path: "documents-export-2026-04-07(2)/motor picture 2.jpg"
+        alt: { fr: "Moteur Nuomake YE3-631-4", en: "Nuomake YE3-631-4 motor" }
+
+  - sku: NMK-MOT-YE3-632-4-018KW
+    category: moteurs
+    brand: NUOMAKE
+    name:
+      fr: "Moteur asynchrone YE3-632-4 — 0,18 kW triphasé"
+      en: "YE3-632-4 asynchronous motor — 0.18 kW 3-phase"
+    shortDescription:
+      fr: "Moteur asynchrone triphasé Nuomake YE3-632-4 de 180 W, 4 pôles, classe IE3."
+      en: "Nuomake YE3-632-4 3-phase asynchronous motor, 180 W, 4-pole, IE3 efficiency class."
+    source:
+      currency: CNY
+      amount: 315
+    specs:
+      - label: { fr: "Puissance", en: "Power" }
+        value: { fr: "0,18",      en: "0.18" }
+        unit: "kW"
+        group: "Électrique"
+      - label: { fr: "Modèle",   en: "Model" }
+        value: { fr: "YE3-632-4", en: "YE3-632-4" }
+        group: "Référence"
+      - label: { fr: "Pôles",   en: "Poles" }
+        value: { fr: "4",         en: "4" }
+        group: "Mécanique"
+      - label: { fr: "Classe",   en: "Efficiency class" }
+        value: { fr: "IE3",       en: "IE3" }
+        group: "Rendement"
+    images:
+      - path: "documents-export-2026-04-07(2)/motor picture 2.jpg"
+        alt: { fr: "Moteur Nuomake YE3-632-4", en: "Nuomake YE3-632-4 motor" }
+
+  - sku: NMK-INV-PROF-750W-1P3P
+    category: variateurs
+    brand: NUOMAKE
+    name:
+      fr: "Variateur de fréquence Nuomake 750 W — 1ph 220V → 3ph 220V"
+      en: "Nuomake 750 W frequency inverter — 1ph 220V → 3ph 220V"
+    shortDescription:
+      fr: "Variateur de fréquence Nuomake 750 W proposé sur facture pro forma de mars 2026."
+      en: "Nuomake 750 W frequency inverter as listed on the March 2026 proforma invoice."
+    source:
+      currency: CNY
+      amount: 462
+    specs:
+      - label: { fr: "Puissance", en: "Power" }
+        value: { fr: "0,75",      en: "0.75" }
+        unit: "kW"
+        group: "Électrique"
+      - label: { fr: "Entrée",  en: "Input" }
+        value: { fr: "220 V monophasé", en: "220 V single-phase" }
+        group: "Électrique"
+      - label: { fr: "Sortie",  en: "Output" }
+        value: { fr: "220 V triphasé", en: "220 V three-phase" }
+        group: "Électrique"
+    images:
+      - path: "documents-export-2026-04-07(2)/inverter1.5kw  2.2kw 3kw7Q9A9475.png"
+        alt: { fr: "Variateur Nuomake 750 W", en: "Nuomake 750 W inverter" }
+
+  - sku: NMK-MCB-1P-10A
+    category: disjoncteurs
+    brand: NUOMAKE
+    name:
+      fr: "Disjoncteur modulaire 1P 10A — AC 400V 50Hz"
+      en: "Modular circuit breaker 1P 10A — AC 400V 50Hz"
+    shortDescription:
+      fr: "Disjoncteur modulaire unipolaire Nuomake 10A, tension 400 V CA, 50 Hz."
+      en: "Nuomake 1-pole modular circuit breaker 10A, 400 V AC, 50 Hz."
+    source:
+      currency: CNY
+      amount: 7
+    specs:
+      - label: { fr: "Pôles",    en: "Poles" }
+        value: { fr: "1",         en: "1" }
+        group: "Caractéristiques"
+      - label: { fr: "Courant nominal", en: "Rated current" }
+        value: { fr: "10",        en: "10" }
+        unit: "A"
+        group: "Électrique"
+      - label: { fr: "Tension",  en: "Voltage" }
+        value: { fr: "400",       en: "400" }
+        unit: "V CA"
+        group: "Électrique"
+      - label: { fr: "Fréquence", en: "Frequency" }
+        value: { fr: "50",        en: "50" }
+        unit: "Hz"
+        group: "Électrique"
+    images:
+      - path: "documents-export-2026-04-07(2)/MCB AC证书.jpg"
+        alt: { fr: "Disjoncteur Nuomake 1P 10A", en: "Nuomake 1P 10A circuit breaker" }
+
+  - sku: NMK-MCB-1P-16A
+    category: disjoncteurs
+    brand: NUOMAKE
+    name:
+      fr: "Disjoncteur modulaire 1P 16A — AC 400V 50Hz"
+      en: "Modular circuit breaker 1P 16A — AC 400V 50Hz"
+    shortDescription:
+      fr: "Disjoncteur modulaire unipolaire Nuomake 16A, tension 400 V CA, 50 Hz."
+      en: "Nuomake 1-pole modular circuit breaker 16A, 400 V AC, 50 Hz."
+    source:
+      currency: CNY
+      amount: 7
+    specs:
+      - label: { fr: "Pôles",    en: "Poles" }
+        value: { fr: "1",         en: "1" }
+        group: "Caractéristiques"
+      - label: { fr: "Courant nominal", en: "Rated current" }
+        value: { fr: "16",        en: "16" }
+        unit: "A"
+        group: "Électrique"
+      - label: { fr: "Tension",  en: "Voltage" }
+        value: { fr: "400",       en: "400" }
+        unit: "V CA"
+        group: "Électrique"
+      - label: { fr: "Fréquence", en: "Frequency" }
+        value: { fr: "50",        en: "50" }
+        unit: "Hz"
+        group: "Électrique"
+    images:
+      - path: "documents-export-2026-04-07(2)/MCB AC证书.jpg"
+        alt: { fr: "Disjoncteur Nuomake 1P 16A", en: "Nuomake 1P 16A circuit breaker" }

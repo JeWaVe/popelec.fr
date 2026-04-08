@@ -14,6 +14,7 @@
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "seed": "NODE_OPTIONS='--no-deprecation' npx tsx src/seed.ts",
+    "import:supplier": "NODE_OPTIONS='--no-deprecation' npx tsx src/scripts/import-supplier.ts",
     "migrate": "payload migrate",
     "migrate:create": "payload migrate:create"
   },
@@ -48,6 +49,7 @@
     "tailwindcss": "^4.0.0",
     "typescript": "^5.7.0",
     "typescript-eslint": "^8.58.0",
-    "vitest": "^4.1.2"
+    "vitest": "^4.1.2",
+    "yaml": "^2.8.3"
   }
 }
